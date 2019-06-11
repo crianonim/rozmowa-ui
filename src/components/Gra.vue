@@ -21,7 +21,7 @@
 
 <script>
 import dialog from "rozmowa/index.mjs";
-import gameData from "../../game-data/adventure/index.mjs";
+import gameData from "../../game-data/adventure-2/index.mjs";
 
 export default {
   name: "Gra",
@@ -45,7 +45,7 @@ export default {
     },
     statusText() {
       console.log("Status liczony");
-      if (this.status) return this.status();
+      if (JSON.stringify(this.ctx) && this.status) return this.status(); // first part so its recomputed;
     }
   },
   methods: {

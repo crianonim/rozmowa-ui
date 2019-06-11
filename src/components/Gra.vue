@@ -13,9 +13,7 @@
         :key="key"
       >{{option.textInterpolated}}</div>
     </div>
-    <div v-if="debug" class="debug">
-        Dialog name: {{dialogName}}, Context : {{context}}
-    </div>
+    <div v-if="debug" class="debug">Dialog name: {{dialogName}}, Context : {{context}}</div>
   </div>
 </template>
 
@@ -30,12 +28,13 @@ export default {
   },
   data() {
     return {
-        debug:true,
+      debug: true,
       dialogName: null,
       ctx: null,
       dialog: null,
       status: null,
-      dialogs: null
+      dialogs: null,
+      stack: []
     };
   },
   computed: {
@@ -66,8 +65,14 @@ export default {
         this.dialog.options[id],
         this.ctx
       );
-      console.log("CHOOSE OPTION",id, result);
-      if (!result) this.dialogName = null;
+      console.log("CHOOSE OPTION", id, result, "STACK", this.stack);
+
+      if (!result) this.dialogName = this.stack.pop();
+      else {
+        this.stack.push(this.dialogName);
+      }
+      // if (!result) this.dialogName = null;
+
       if (typeof result == "string") this.dialogName = result;
       this.updateDialog();
     }
@@ -85,16 +90,16 @@ export default {
 
 <style>
 .container {
-    width: 800px;
-    margin: 60px    auto;
-
+  width: 800px;
+  margin: 60px auto;
 }
-.status,.dialog {
-    border: 1px solid black;
-    box-shadow: 3px 3px;    
-    padding: 5px;
-    border-radius: 3px;
-    margin-bottom: 20px;
+.status,
+.dialog {
+  border: 1px solid black;
+  box-shadow: 3px 3px;
+  padding: 5px;
+  border-radius: 3px;
+  margin-bottom: 20px;
 }
 .intro {
   font-style: italic;
@@ -108,12 +113,12 @@ export default {
   cursor: pointer;
 }
 .option:hover {
-    background-color: black;
-    color: white;
+  background-color: black;
+  color: white;
 }
 .debug {
-    font-family: monospace;
-    font-size: 0.8;
-    margin-top:200px;
+  font-family: monospace;
+  font-size: 0.8;
+  margin-top: 200px;
 }
 </style>

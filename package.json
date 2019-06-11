@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "core-js": "^2.6.9",
+    "rozmowa": "github:crianonim/rozmowa#master",
+    "screept": "github:crianonim/screept#master",
     "vue": "^2.6.10"
   },
   "devDependencies": {

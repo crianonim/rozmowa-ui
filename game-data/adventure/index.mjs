@@ -1,5 +1,9 @@
 import dialogs from './dialogs.mjs';
-import screept from '../../../lib/screept.mjs';
+import rozmowa from 'rozmowa/index.mjs';
+// import screept from 'screept/index.mjs';
+const screept=rozmowa.screept;
+console.log("ROZMOWA",rozmowa);
+
 const dialogName = "adventure";
 
 const ctx = { other: { met: -1 }, turn: 0, score: 0, backpack: 1, inventory: { money: 5, sword:0}, stats:{energy:10} }
@@ -12,6 +16,7 @@ function status() {
     return screept.interpolate(s,ctx)
 }
 function init(){
+    console.log("INIT RUN")
     screept.addVerb("INC", 1, a => {
         a.object[a.key] = Number(a.value || 0) + 1;
         return a.object[a.key];

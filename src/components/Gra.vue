@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import dialog from "../../../index.mjs";
-import screept from "../../../lib/screept.mjs";
+import dialog from "rozmowa/index.mjs";
 import gameData from "../../game-data/adventure/index.mjs";
 
 export default {
@@ -67,7 +66,7 @@ export default {
         this.dialog.options[id],
         this.ctx
       );
-      console.log(id, result);
+      console.log("CHOOSE OPTION",id, result);
       if (!result) this.dialogName = null;
       if (typeof result == "string") this.dialogName = result;
       this.updateDialog();

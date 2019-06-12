@@ -2,6 +2,7 @@
   <div class="container">
     <div class="status">
       <div>{{statusText}}</div>
+      <div @click="chooseOption" data-option="options" class="option">Options</div>
     </div>
     <div v-if="dialog" class="dialog">
       <div class="intro">{{dialog.intro.textInterpolated}}</div>
@@ -9,7 +10,6 @@
         @click="chooseOption"
         :data-option="key"
         class="option"
-
         v-for="(option,key) in dialog.options"
         :test="dialogName+'_'+key+' '+option.text.length"
         :key="dialogName+'_'+key+' '+option.text.length"
@@ -63,17 +63,19 @@ export default {
     },
     chooseOption(event) {
       let id = event.target.dataset.option;
-      let result = dialog.processOptionChoice(
-        this.dialog.options[id],
-        this.ctx
-      );
+      let result;
+      if (id === "options") {
+        result = "options";
+      } else {
+        result = dialog.processOptionChoice(this.dialog.options[id], this.ctx);
+      }
 
       if (result === "return") {
         this.dialogName = this.stack.pop();
       } else if (!result) {
         this.dialogName = null;
       } else if (typeof result == "string") {
-        if (result !== this.stack[this.stack.length-1]) {
+        if (result !== this.stack[this.stack.length - 1]) {
           this.stack.push(this.dialogName);
           this.dialogName = result;
         }

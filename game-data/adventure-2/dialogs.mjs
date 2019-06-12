@@ -1,5 +1,14 @@
 export default
-    [
+    [{
+        id:"options",
+        intro:[
+            {text:"Options"},
+        ],
+        options:[
+            {text:"Back",go:"return"},
+            {text:"Eat a meal",if:"inventory.meal 0 >",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="}
+        ]
+    },
         {
             id:"start",
             intro:[

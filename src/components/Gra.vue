@@ -10,7 +10,7 @@
         :data-option="key"
         class="option"
         v-for="(option,key) in dialog.options"
-        :key="key"
+        :key="dialogName+'_'+key"
       >{{option.textInterpolated}}</div>
     </div>
     <div v-if="debug" class="debug">Dialog name: {{dialogName}}, Context : {{context}}</div>
@@ -95,8 +95,9 @@ export default {
 
 <style>
 .container {
-  width: 800px;
-  margin: 60px auto;
+  /* width: 100%; */
+  max-width: 800px;
+  margin: auto;
 }
 .status,
 .dialog {

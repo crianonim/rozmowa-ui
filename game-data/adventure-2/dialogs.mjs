@@ -19,7 +19,7 @@ export default
                 { text: "You look alright, no obvious damage" }
             ],
             options: [
-                { text: "Back", go: "exit" }
+                { text: "Back", go: "return" }
             ]
         },
         {
@@ -30,7 +30,7 @@ export default
             options: [
                 { text: `Talk to {{"an elderly man" "Bernie" met_bernie ! ?}} sitting on a bench on the green`, go: "talk_bernie" },
                 { text:`Go to the pond.`,go:"pond"},
-                { text: "Back to the road", run:"2 TURN", go: "exit" }
+                { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
         {
@@ -43,7 +43,7 @@ export default
             ],
             options: [
                 { text: "Can you tell me what is this place?", go: "bernie_what_is_this_place" },
-                { text: "Nothing, I'm leaving", go: "exit" }
+                { text: "Nothing, I'm leaving", go: "return" }
             ]
         },
         {
@@ -52,7 +52,7 @@ export default
                 { text: "It's just a simple village." }
             ],
             options: [
-                { text: "Thanks.", go: "exit" }
+                { text: "Thanks.", go: "return" }
             ]
         },
         {
@@ -63,7 +63,7 @@ export default
             options: [
                 { text: "Wash yourself.", if: "dirty", run:"2 TURN;0 dirty :=" },
                 { text: "Try to fish",go:"fishing"},
-                { text: "Back", go: "back" }
+                { text: "Back", go: "return" }
             ]
         },
 
@@ -75,7 +75,7 @@ export default
                 { text:"Sorry, no bonus"},
             ],
             options: [
-                { text: "Back", go: "exit" }
+                { text: "Back", go: "return" }
             ]
         },
         {
@@ -85,7 +85,7 @@ export default
             ],
             options: [
                 { text: "Hello to you to", go: "other" },
-                { text: "I don't want to talk", go: "exit" }
+                { text: "I don't want to talk", go: "return" }
             ]
         },
         {
@@ -99,7 +99,7 @@ export default
             options: [
                 { text: "Same here", if: "other.met 0 >", go: "basic" },
                 { text: "Hello to you to", run: "other.met 1 - other.met :=" },
-                { text: "I don't want to talk", go: "exit" }]
+                { text: "I don't want to talk", go: "return" }]
         },
 
         {
@@ -132,7 +132,7 @@ export default
                 { text: 'Hello, here\'s the sword to kill dragon', run: 'inventory.sword INC' }
             ],
             options: [
-                { text: 'Leave', go: "exit" },
+                { text: 'Leave', go: "return" },
             ]
         }
     ]

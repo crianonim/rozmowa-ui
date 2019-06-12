@@ -65,15 +65,20 @@ export default {
         this.dialog.options[id],
         this.ctx
       );
-      console.log("CHOOSE OPTION", id, result, "STACK", this.stack);
 
-      if (!result) this.dialogName = this.stack.pop();
-      else {
-        this.stack.push(this.dialogName);
+      if (result === "return") {
+        this.dialogName = this.stack.pop();
+      } else if (!result) {
+        this.dialogName = null;
+      } else if (typeof result == "string") {
+        if (result !== this.stack[this.stack.length-1]) {
+          this.stack.push(this.dialogName);
+          this.dialogName = result;
+        }
       }
       // if (!result) this.dialogName = null;
 
-      if (typeof result == "string") this.dialogName = result;
+      console.log("CHOOSE OPTION", id, result, "STACK", this.stack.join(","));
       this.updateDialog();
     }
   },

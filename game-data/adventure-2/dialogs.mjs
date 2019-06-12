@@ -2,11 +2,14 @@ export default
     [{
         id:"options",
         intro:[
-            {text:"Options"},
+            {text:"Options. You have {{INVENTORY}}"},
         ],
         options:[
+            {text:"Eat a meal",if:"inventory.meal 0 > stats.energy 10 < &",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="},
+            {text:"Rest an hour",if:"stats.energy 10 <",run:"4 TURN; stats.energy INC"},
+            {text:"Wait an hour",run:"4 TURN"},
+
             {text:"Back",go:"return"},
-            {text:"Eat a meal",if:"inventory.meal 0 >",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="}
         ]
     },
         {

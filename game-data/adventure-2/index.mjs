@@ -28,10 +28,12 @@ const ctx = {
 const TURNS_PER_HOUR = 4;
 
 function status() {
-    let s = `It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}}
-     You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
-     Energy: {{stats.energy}}
-     `
+    // let s = `It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}}
+    //  You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
+    //  Energy: {{stats.energy}}
+    //  `
+ let s = `Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}. You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
+
     return screept.interpolate(s, ctx)
 }
 
@@ -47,7 +49,7 @@ function init() {
     });
     screept.addVerb("TURN", 1, (a) => {
         for (let i = 0; i < a.value; i++) {
-            console.log("Turn passed, new turn ", ++ctx.turn);
+            nextTurn();
         }
     })
     screept.addVerb("HOUR", 0, () => {
@@ -67,6 +69,22 @@ function init() {
         console.log("DEBUG",a.value)
         return a.value;
     })
+    screept.addVerb("INVENTORY",0,()=>{
+        return Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ")
+    })
+
+    function nextTurn(){
+        console.log("Turn passed, new turn ", ++ctx.turn);
+            if (ctx.turn % (TURNS_PER_HOUR*24)===TURNS_PER_HOUR*22){
+                console.log("TEN!")
+                waitUntilMorning();
+            }
+    }
+    function waitUntilMorning(){
+        while (ctx.turn % (TURNS_PER_HOUR*24)!==TURNS_PER_HOUR*6){
+            nextTurn();
+        }
+    }
 
 }
 export default {

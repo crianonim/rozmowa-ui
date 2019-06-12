@@ -16,7 +16,7 @@ export default
             id: "look-at-self",
             run:"1 TURN",
             intro: [
-                { text: "You look alright, no obvious damage" }
+                { text: `You look {{"rested" "tired" stats.energy 4 > ?}}, no obvious damage. {{"You are dirty." "" dirty ?}}` }
             ],
             options: [
                 { text: "Back", go: "return" }
@@ -30,9 +30,11 @@ export default
             options: [
                 { text: `Talk to {{"an elderly man" "Bernie" met_bernie ! ?}} sitting on a bench on the green`, go: "talk_bernie" },
                 { text:`Go to the pond.`,go:"pond"},
+                { text:`Go to the inn.`,go:"inn"},
                 { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
+        //BERNIE
         {
             id: "talk_bernie",
             run:"met_bernie INC",
@@ -47,14 +49,19 @@ export default
             ]
         },
         {
+
             id: "bernie_what_is_this_place",
+            run:"1 citaa_remembered :=",
             intro: [
-                { text: "It's just a simple village." }
+                { text: `'It's just a simple village.' we are the last stop before the sea port town of Oppa.
+                 People usually go there if they need to get to Citaa, the capital'. You just remembered! You need to get to Citaa!` }
             ],
             options: [
+                {text:"I just remembered! I need to to Citaa! How can I get there?"},
                 { text: "Thanks.", go: "return" }
             ]
         },
+        // POND
         {
             id: "pond",
             intro: [
@@ -76,6 +83,41 @@ export default
             ],
             options: [
                 { text: "Back", go: "return" }
+            ]
+        },
+        // INN
+        {
+            id: "inn",
+            intro: [
+                { text: "You are in a small inn. There is a bartender at the bar." }
+            ],
+            options: [
+                { text: "Talk to the bartender",go:"bartender_talk"},
+                { text: "Back", go: "return" }
+            ]
+        },
+        {
+            id: "bartender_talk",
+            
+            intro: [
+                { text :`What can I do for you?`,if:"talked_to_bartender"},
+                { text: `"Hello there. Who are you stranger?"` }
+            ],
+            options: [
+                { text:"I don't remember.",run:"1 talked_to_bartender :=",if:"talked_to_bartender !"},
+                { text:"All I remember is need to get to Citaa.",if:"citaa_remembered",run:"1 talked_to_bartender :=",go:"bartender_talk_citaa"},
+
+                { text:"Thats's not your business! Bye.",go:"return",run:"1 talked_to_bartender :=",if:"talked_to_bartender !"},
+                {text:"Nothing",go:"return",if:"talked_to_bartender"}
+            ]
+        },
+        {
+            id: "bartender_talk_citaa",
+            intro: [
+                { text :`"I hope you have a lot of money. The ship fare costs 100 coins."`,if:"talked_to_bartender"},
+            ],
+            options: [
+                {text:"I understand.",go:"return"}
             ]
         },
         {

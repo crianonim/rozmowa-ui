@@ -4,9 +4,9 @@ import rozmowa from 'rozmowa/index.mjs';
 const screept=rozmowa.screept;
 console.log("ROZMOWA",rozmowa);
 
-const dialogName = "start";
+const dialogName = "village";
 
-const ctx = { other: { met: -1 }, turn: 25, score: 0, backpack: 1, inventory: { money: 5, sword:0}, stats:{energy:10} ,dirty:true}
+const ctx = { other: { met: -1 }, turn: 25, score: 0, backpack: 1, inventory: { money: 0, sword:0}, stats:{energy:8} ,dirty:true}
 
 const TURNS_PER_HOUR=4;
 function status() {

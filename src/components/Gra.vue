@@ -9,8 +9,10 @@
         @click="chooseOption"
         :data-option="key"
         class="option"
+
         v-for="(option,key) in dialog.options"
-        :key="dialogName+'_'+key"
+        :test="dialogName+'_'+key+' '+option.text.length"
+        :key="dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
     <div v-if="debug" class="debug">Dialog name: {{dialogName}}, Context : {{context}}</div>

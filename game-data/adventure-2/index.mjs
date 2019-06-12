@@ -2,15 +2,15 @@ import dialogs from './dialogs.mjs';
 import rozmowa from 'rozmowa/index.mjs';
 // import screept from 'screept/index.mjs';
 const screept=rozmowa.screept;
-console.log("ROZMOWA",rozmowa);
+// console.log("ROZMOWA",rozmowa);
 
 const dialogName = "village";
 
-const ctx = { other: { met: -1 }, turn: 25, score: 0, backpack: 1, inventory: { money: 0, sword:0}, stats:{energy:8} ,dirty:true}
+const ctx = { other: { met: -1 }, turn: 25, score: 0, backpack: 1, inventory: { money: 20, sword:0, fish:1,meal:0}, stats:{energy:8} ,dirty:true}
 
 const TURNS_PER_HOUR=4;
 function status() {
-    let s=`It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}} You have {{score}} points.
+    let s=`It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}}
      You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
      Energy: {{stats.energy}}
      `

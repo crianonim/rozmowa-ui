@@ -28,7 +28,7 @@ export default
                 { text: `You are in the village. {{"There are some people around." "Everyone gone inside for the night" IS_DAY ?}}` }
             ],
             options: [
-                { text: `Talk to {{"an elderly man" "Bernie" met_bernie ! ?}} sitting on a bench on the green`, go: "talk_bernie" },
+                { text: `Talk to {{"an elderly man" "Bernie" met_bernie ! ?}} sitting on a bench on the green`, go: "talk_bernie", if:"bartender_favor_bernie_finished !" },
                 { text:`Go to the pond.`,go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
                 { text: "Back to the road", run:"2 TURN", go: "return" }
@@ -45,7 +45,19 @@ export default
             ],
             options: [
                 { text: "Can you tell me what is this place?", go: "bernie_what_is_this_place" },
+                { text:"The bartender says he is sorry and would like to go the the inn for a meal",if:"bartender_favor_bernie_asked bartender_favor_bernie_finished ! &",go:"bernie_agrees"},
                 { text: "Nothing, I'm leaving", go: "return" }
+            ]
+        },
+        {
+
+            id: "bernie_agrees",
+            intro: [
+                { text: `"Ok. Free meal? I guess I can forgive him. Let's go!"` }
+            ],
+            options: [
+                {text:"OK.",go:"bartender_favor_bernie_finished"},
+                // { text: "Thanks.", go: "return" }
             ]
         },
         {
@@ -93,6 +105,7 @@ export default
             ],
             options: [
                 { text: "Talk to the bartender",go:"bartender_talk"},
+                { text: "Talk to Bernie", go:"talk_bernie",if:"bartender_favor_bernie_finished"},
                 { text: "Back", go: "return" }
             ]
         },
@@ -105,9 +118,11 @@ export default
             ],
             options: [
                 { text:"I don't remember.",run:"1 talked_to_bartender :=",if:"talked_to_bartender !"},
-                { text:"All I remember is need to get to Citaa.",if:"citaa_remembered",run:"1 talked_to_bartender :=",go:"bartender_talk_citaa"},
-
                 { text:"Thats's not your business! Bye.",go:"return",run:"1 talked_to_bartender :=",if:"talked_to_bartender !"},
+                { text:"How can I earn some money?",if:"talked_to_bartender",go:"bartender_money"},
+                { text:"I would like to buy something.",if:"talked_to_bartender",go:"bartender_sells"},
+
+                { text:"All I remember is need to get to Citaa.",if:"citaa_remembered",run:"1 talked_to_bartender :=",go:"bartender_talk_citaa"},
                 {text:"Nothing",go:"return",if:"talked_to_bartender"}
             ]
         },
@@ -118,6 +133,38 @@ export default
             ],
             options: [
                 {text:"I understand.",go:"return"}
+            ]
+        },
+        {
+            id: "bartender_money",
+            run:"1 bartender_favor_bernie_asked :=",
+            intro: [
+                { text :`"I always can buy fish from you.{{"Go and tell Bernie I'm sorry, ask him to come here and you both will get free meal." "" bartender_favor_bernie_finished ! ?}}"`},
+            ],
+            options: [
+                {text:`Sell 1 fish`,if:"inventory.fish 0 >",run:"inventory.fish -1 INC_BY;inventory.money 3 INC_BY"},
+                {text:"I understand.",go:"return"}
+            ]
+        },
+        {
+            id: "bartender_sells",
+            intro: [
+                { text :`"I have meals for 5 gold."`}
+            ],
+            options: [
+                {text:`Buy 1 meal`,if:"inventory.money 4 >",run:"inventory.money -5 INC_BY;inventory.meal INC"},
+                {text:"Thanks.",go:"return"}
+            ]
+        },
+        {
+            run:"1 bartender_favor_bernie_finished :=; inventory.meal INC",
+            id: "bartender_favor_bernie_finished",
+            intro: [
+                { text: `You both went to the inn. The Bartender says "Thanks for that! Meals for you!" and gives you a nice hot meal.` }
+            ],
+            options: [
+                {text:"Thanks.",go:"inn"},
+                // { text: "Thanks.", go: "return" }
             ]
         },
         {

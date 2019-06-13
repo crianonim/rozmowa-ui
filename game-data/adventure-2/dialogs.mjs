@@ -5,6 +5,7 @@ export default
             {text:"Options. You have {{INVENTORY}}"},
         ],
         options:[
+            {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat a meal",if:"inventory.meal 0 > stats.energy 10 < &",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="},
             {text:"Rest an hour",if:"stats.energy 10 <",run:"4 TURN; stats.energy INC"},
             {text:"Wait an hour",run:"4 TURN"},
@@ -21,7 +22,6 @@ export default
                 {{"The road seems to lead to some village, you have a feeling that the other way is trouble." "" flags.looked_around ?}}` }
             ],
             options:[
-                {text:"Look at yourself.",go:"look-at-self"},
                 {text:"Look around.",if:"flags.looked_around !",run:"1 flags.looked_around := ; 1 TURN"},
                 {text:"Go towards the village",if:"flags.looked_around",go:"village",run:"2 TURN"}
             ]
@@ -45,7 +45,7 @@ export default
                 { text: `Talk to {{"an elderly man" "Bernie" flags.met_bernie ! ?}} sitting on a bench on the green`, go: "talk_bernie", if:"flags.bartender_favor_bernie_finished !" },
                 { text:`Go to the pond.`,go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
-                { text: "Back to the road", run:"2 TURN", go: "return" }
+                // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
         //BERNIE
@@ -83,8 +83,17 @@ export default
                  People usually go there if they need to get to Citaa, the capital'. You just remembered! You need to get to Citaa!` }
             ],
             options: [
-                {text:"I just remembered! I need to to Citaa! How can I get there?"},
+                {text:"I just remembered! I need to to Citaa! How can I get there?",go:"bernie_how_citaa"},
                 { text: "Thanks.", go: "return" }
+            ]
+        },
+        {
+            id:"bernie_how_citaa",
+            intro:[
+                {text:"Well, the ships to Citaa leave every 12 days, and you can catch a carriage to Oppa every afternoon, the bartender knows the current price."}
+            ],
+            options:[
+                {text:"Thanks",go:"return"}
             ]
         },
         // POND

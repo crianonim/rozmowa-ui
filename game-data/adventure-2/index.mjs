@@ -4,9 +4,10 @@ import rozmowa from 'rozmowa/index.mjs';
 const screept = rozmowa.screept;
 // console.log("ROZMOWA",rozmowa);
 
-const dialogName = "start";
+// const dialogName = "start";
 
 const ctx = {
+    dialogName:"start",
     other: {
         met: -1
     },
@@ -99,7 +100,7 @@ function init() {
 export default {
     dialogs,
     status,
-    dialogName,
+    // dialogName,
     ctx,
     init
 }

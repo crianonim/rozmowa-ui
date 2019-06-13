@@ -11,11 +11,11 @@
         :data-option="key"
         class="option"
         v-for="(option,key) in dialog.options"
-        :test="dialogName+'_'+key+' '+option.text.length"
-        :key="dialogName+'_'+key+' '+option.text.length"
+        :test="ctx.dialogName+'_'+key+' '+option.text.length"
+        :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <div v-if="debug" class="debug">Dialog name: {{dialogName}}, Context : {{context}}</div>
+    <div v-if="debug" class="debug"> Context : {{context}}</div>
   </div>
 </template>
 
@@ -31,8 +31,8 @@ export default {
   data() {
     return {
       debug: true,
-      dialogName: null,
-      ctx: null,
+      // dialogName: null,
+      ctx: {},
       dialog: null,
       status: null,
       dialogs: null,
@@ -46,17 +46,17 @@ export default {
     },
     statusText() {
       console.log("Status liczony");
-      if (JSON.stringify(this.ctx) && this.status) return this.status(); // first part so its recomputed;
+      if (JSON.stringify(this.ctx) && this.status) return this.status(this.ctx); // first part so its recomputed;
     }
   },
   methods: {
     updateDialog() {
-      console.log("dialog liczony", this.dialogName);
-      if (this.dialogName == null) this.dialog = null;
+      console.log("dialog liczony", this.ctx.dialogName);
+      if (this.ctx.dialogName == null) this.dialog = null;
       else {
         this.dialog = dialog.processDialog(
           this.dialogs,
-          this.dialogName,
+          this.ctx.dialogName,
           this.ctx
         );
       }
@@ -71,13 +71,13 @@ export default {
       }
 
       if (result === "return") {
-        this.dialogName = this.stack.pop();
+        this.ctx.dialogName = this.stack.pop();
       } else if (!result) {
-        this.dialogName = null;
+        this.ctx.dialogName = null;
       } else if (typeof result == "string") {
         if (result !== this.stack[this.stack.length - 1]) {
-          this.stack.push(this.dialogName);
-          this.dialogName = result;
+          this.stack.push(this.ctx.dialogName);
+          this.ctx.dialogName = result;
         }
       }
       // if (!result) this.dialogName = null;
@@ -88,7 +88,7 @@ export default {
   },
   mounted() {
     this.ctx = gameData.ctx;
-    this.dialogName = gameData.dialogName;
+    // this.cdialogName = gameData.dialogName;
     this.status = gameData.status;
     this.dialogs = gameData.dialogs;
     gameData.init();

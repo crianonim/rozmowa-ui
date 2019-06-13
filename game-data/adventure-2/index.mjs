@@ -25,6 +25,7 @@ const ctx = {
    
     flags:{
         dirty: 1,
+        passedOut:0,
         looked_around:0,
         met_bernie:0,
         talked_to_bartender:0,
@@ -42,7 +43,10 @@ function status() {
     //  You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
     //  Energy: {{stats.energy}}
     //  `
- let s = `Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}. You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
+ let s = `
+ {{"You have passed out, falling asleep where you where! " "" flags.passedOut ?}}{{0 flags.passedOut :=; ""}}
+ Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}.
+  You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
 
     return screept.interpolate(s, ctx)
 }
@@ -95,7 +99,8 @@ function init() {
     function nextTurn(){
         console.log("Turn passed, new turn ", ++ctx.turn);
             if (ctx.turn % (TURNS_PER_HOUR*24)===TURNS_PER_HOUR*22){
-                console.log("TEN!")
+                console.log("Pass out!");
+                ctx.flags.passedOut=1;
                 waitUntilMorning();
             }
     }

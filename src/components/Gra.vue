@@ -15,18 +15,23 @@
         :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <div v-if="debug" class="debug">Context : {{context}}</div>
+    <!-- <div v-if="debug" class="debug">Context : {{context}}</div> -->
+    <debug :ctx="ctx"></debug>
   </div>
 </template>
 
 <script>
 import Dialog from "rozmowa/index.mjs";
+import Debug from './Debug';
 import gameData from "../../game-data/adventure-2/index.mjs";
 
 export default {
   name: "Gra",
   props: {
     msg: String
+  },
+  components:{
+    Debug
   },
   data() {
     return {

@@ -8,6 +8,7 @@ export default
             {text:"Eat a meal",if:"inventory.meal 0 > stats.energy 10 < &",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="},
             {text:"Rest an hour",if:"stats.energy 10 <",run:"4 TURN; stats.energy INC"},
             {text:"Wait an hour",run:"4 TURN"},
+            {text:"Sleep until morning",run:"1 flags.sleeping :=;WAIT_UNTIL_MORNING;0 flags.sleeping := ; 15 stats.energy :="},
             {text:"Save Game",run:"SAVE"},
             {text:"Load Game",run:"LOAD"},
             {text:"Back",go:"return"},
@@ -101,7 +102,7 @@ export default
 
         {  
             id: "fishing",
-            run :`2 TURN; 1 0 50 TEST ? catch := ; inventory.fish  catch INC_BY`,
+            run :`2 TURN; 1 0 50 TEST_ROLL ? catch := ; inventory.fish  catch INC_BY`,
             intro: [
                 { text: "You caught a fish!",if:"catch" },
                 { text:"Sorry, no bonus"},

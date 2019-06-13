@@ -26,6 +26,7 @@ const ctx = {
     flags:{
         dirty: 1,
         passedOut:0,
+        sleeping:0,
         looked_around:0,
         met_bernie:0,
         talked_to_bartender:0,
@@ -45,7 +46,7 @@ function status() {
     //  `
  let s = `
  {{"You have passed out, falling asleep where you where! " "" flags.passedOut ?}}{{0 flags.passedOut :=; ""}}
- Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}.
+ Time is {{HOUR}} o'clock. It's {{DAY_NUMBER}} {{"day" "night" IS_DAY ?}}.
   You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
 
     return screept.interpolate(s, ctx)
@@ -74,8 +75,14 @@ function init() {
         if (hour > 5 && hour < 20) return true;
         return false;
     })
+    screept.addVerb("DAY_NUMBER",0,()=>{
+        return 1+(ctx.turn / TURNS_PER_HOUR / 24 )>>0
+    })
+    screept.addVerb("WAIT_UNTIL_MORNING",0,()=>{
+        waitUntilMorning();
+    })
     //take percentage and return true or false 
-    screept.addVerb("TEST", 1, (a) => {
+    screept.addVerb("TEST_ROLL", 1, (a) => {
         let roll = Math.random() * 100;
         return roll < a.value;
     })
@@ -100,7 +107,9 @@ function init() {
         console.log("Turn passed, new turn ", ++ctx.turn);
             if (ctx.turn % (TURNS_PER_HOUR*24)===TURNS_PER_HOUR*22){
                 console.log("Pass out!");
-                ctx.flags.passedOut=1;
+                if (!ctx.flags.sleeping){
+                    ctx.flags.passedOut=1;
+                }
                 waitUntilMorning();
             }
     }

@@ -36,7 +36,7 @@ export default {
       dialog: null,
       status: null,
       dialogs: null,
-      stack: []
+      // stack: []
     };
   },
   computed: {
@@ -71,18 +71,18 @@ export default {
       }
 
       if (result === "return") {
-        this.ctx.dialogName = this.stack.pop();
+        this.ctx.dialogName = this.ctx.stack.pop();
       } else if (!result) {
         this.ctx.dialogName = null;
       } else if (typeof result == "string") {
-        if (result !== this.stack[this.stack.length - 1]) {
-          this.stack.push(this.ctx.dialogName);
+        if (result !== this.ctx.stack[this.ctx.stack.length - 1]) {
+          this.ctx.stack.push(this.ctx.dialogName);
           this.ctx.dialogName = result;
         }
       }
       // if (!result) this.dialogName = null;
 
-      console.log("CHOOSE OPTION", id, result, "STACK", this.stack.join(","));
+      console.log("CHOOSE OPTION", id, result, "STACK", this.ctx.stack.join(","));
       this.updateDialog();
     }
   },

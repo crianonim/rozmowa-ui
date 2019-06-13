@@ -8,6 +8,7 @@ const screept = rozmowa.screept;
 
 const ctx = {
     dialogName:"start",
+    stack:[],
     other: {
         met: -1
     },

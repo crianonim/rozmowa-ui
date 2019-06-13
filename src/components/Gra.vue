@@ -16,7 +16,8 @@
       >{{option.textInterpolated}}</div>
     </div>
     <!-- <div v-if="debug" class="debug">Context : {{context}}</div> -->
-    <debug :ctx="ctx"></debug>
+    <input type="checkbox" v-model="debug">
+    <debug v-if="debug" :ctx="ctx"></debug>
   </div>
 </template>
 

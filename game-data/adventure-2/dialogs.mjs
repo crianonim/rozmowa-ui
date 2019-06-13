@@ -105,7 +105,7 @@ export default
             options: [
                 { text: "Wash yourself.", if: "flags.dirty", run:"2 TURN;0 flags.dirty :=" },
                 { text: "Try to fish",go:"fishing"},
-                { text: "Back", go: "return" }
+                { text: "Back to village", go: "village" }
             ]
         },
 
@@ -129,7 +129,7 @@ export default
             options: [
                 { text: "Talk to the bartender",go:"bartender_talk"},
                 { text: "Talk to Bernie", go:"talk_bernie",if:"flags.bartender_favor_bernie_finished"},
-                { text: "Back", go: "return" }
+                { text: "Back to village", go: "village" }
             ]
         },
         {

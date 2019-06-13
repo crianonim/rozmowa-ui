@@ -77,8 +77,8 @@ export default {
       } else if (typeof result == "string") {
         if (result !== this.ctx.stack[this.ctx.stack.length - 1]) {
           this.ctx.stack.push(this.ctx.dialogName);
-          this.ctx.dialogName = result;
         }
+          this.ctx.dialogName = result;
       }
       // if (!result) this.dialogName = null;
 

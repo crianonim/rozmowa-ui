@@ -4,7 +4,7 @@
     <h1 class="dialogName">Dialog: {{ctx.dialogName}} Turn: {{ctx.turn}}</h1>
     <h1>Stack</h1>
     <div class="stack flex-wrapped">
-        <div v-for="dialog in ctx.stack" :key="dialog">{{dialog}}</div>
+        <div v-for="(dialog,key) in ctx.stack" :key="dialog+key">{{dialog}}</div>
     </div>
     <h1>Flags</h1>
     <div class="flags flex-wrapped">
@@ -15,7 +15,7 @@
         <div v-for="(item,key) in ctx.inventory" :class="{flagOn:item}" :key="key" >{{key}}({{item}})</div>
     </div>
     <h1>Stats</h1>
-    <div class="inventory flex-wrapped">
+    <div class="stats flex-wrapped">
         <div v-for="(stat,key) in ctx.stats"  :key="key" >{{key}}({{stat}})</div>
     </div>
   </div>

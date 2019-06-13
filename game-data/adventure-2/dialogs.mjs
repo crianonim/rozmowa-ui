@@ -8,7 +8,8 @@ export default
             {text:"Eat a meal",if:"inventory.meal 0 > stats.energy 10 < &",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="},
             {text:"Rest an hour",if:"stats.energy 10 <",run:"4 TURN; stats.energy INC"},
             {text:"Wait an hour",run:"4 TURN"},
-
+            {text:"Save Game",run:"SAVE"},
+            {text:"Load Game",run:"LOAD"},
             {text:"Back",go:"return"},
         ]
     },

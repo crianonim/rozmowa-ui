@@ -82,7 +82,16 @@ function init() {
     screept.addVerb("INVENTORY",0,()=>{
         return Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ")
     })
-
+    screept.addVerb("SAVE",0,()=>{
+        localStorage.setItem('save',JSON.stringify(ctx))
+    })
+    screept.addVerb("LOAD",0,()=>{
+        let save=JSON.parse(localStorage.getItem('save'));
+        Object.keys(ctx).forEach(key=>{
+            ctx[key]=save[key];
+        });
+        
+    })
     function nextTurn(){
         console.log("Turn passed, new turn ", ++ctx.turn);
             if (ctx.turn % (TURNS_PER_HOUR*24)===TURNS_PER_HOUR*22){

@@ -15,12 +15,12 @@
         :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <div v-if="debug" class="debug"> Context : {{context}}</div>
+    <div v-if="debug" class="debug">Context : {{context}}</div>
   </div>
 </template>
 
 <script>
-import dialog from "rozmowa/index.mjs";
+import Dialog from "rozmowa/index.mjs";
 import gameData from "../../game-data/adventure-2/index.mjs";
 
 export default {
@@ -33,41 +33,35 @@ export default {
       debug: true,
       // dialogName: null,
       ctx: {},
-      dialog: null,
+      // dialog: null,
       status: null,
-      dialogs: null,
+      dialogs: null
       // stack: []
     };
   },
   computed: {
+    dialog() {
+      if (!this.ctx.dialogName) return null;
+      console.log("dialog liczony", this.ctx.dialogName);
+      return Dialog.processDialog(this.dialogs, this.ctx.dialogName, this.ctx); // potentially check if null, not sure how it deals with lack of dialogname
+    },
     context() {
       console.log("Context liczony");
       return JSON.stringify(this.ctx);
     },
     statusText() {
       console.log("Status liczony");
-      if (JSON.stringify(this.ctx) && this.status) return this.status(this.ctx); // first part so its recomputed;
+      if (JSON.stringify(this.ctx) && this.status) return this.status(); // first part so its recomputed;
     }
   },
   methods: {
-    updateDialog() {
-      console.log("dialog liczony", this.ctx.dialogName);
-      if (this.ctx.dialogName == null) this.dialog = null;
-      else {
-        this.dialog = dialog.processDialog(
-          this.dialogs,
-          this.ctx.dialogName,
-          this.ctx
-        );
-      }
-    },
     chooseOption(event) {
       let id = event.target.dataset.option;
       let result;
       if (id === "options") {
         result = "options";
       } else {
-        result = dialog.processOptionChoice(this.dialog.options[id], this.ctx);
+        result = Dialog.processOptionChoice(this.dialog.options[id], this.ctx);
       }
 
       if (result === "return") {
@@ -82,17 +76,23 @@ export default {
       }
       // if (!result) this.dialogName = null;
 
-      console.log("CHOOSE OPTION", id, result, "STACK", this.ctx.stack.join(","));
-      this.updateDialog();
+      console.log(
+        "CHOOSE OPTION",
+        id,
+        result,
+        "STACK",
+        this.ctx.stack.join(",")
+      );
+      // this.updateDialog();
     }
   },
   mounted() {
-    this.ctx = gameData.ctx;
     // this.cdialogName = gameData.dialogName;
-    this.status = gameData.status;
     this.dialogs = gameData.dialogs;
+    this.status = gameData.status;
+    this.ctx = gameData.ctx;
     gameData.init();
-    this.updateDialog();
+    // this.updateDialog();
   }
 };
 </script>

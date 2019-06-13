@@ -37,12 +37,11 @@ const ctx = {
 
 const TURNS_PER_HOUR = 4;
 
-function status(c) {
+function status() {
     // let s = `It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}}
     //  You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
     //  Energy: {{stats.energy}}
     //  `
-    console.log("Status",c==ctx,c,ctx)
  let s = `Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}. You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
 
     return screept.interpolate(s, ctx)

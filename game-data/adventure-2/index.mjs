@@ -4,15 +4,13 @@ import rozmowa from 'rozmowa/index.mjs';
 const screept = rozmowa.screept;
 // console.log("ROZMOWA",rozmowa);
 
-const dialogName = "village";
+const dialogName = "start";
 
 const ctx = {
     other: {
         met: -1
     },
     turn: 25,
-    score: 0,
-    backpack: 1,
     inventory: {
         money: 20,
         sword: 0,
@@ -22,16 +20,27 @@ const ctx = {
     stats: {
         energy: 6
     },
-    dirty: true
+   
+    flags:{
+        dirty: 1,
+        looked_around:0,
+        met_bernie:0,
+        talked_to_bartender:0,
+        bartender_favor_bernie_finished:0,
+        bartender_favor_bernie_asked:0,
+        citaa_remembered:0,
+    },
+
 }
 
 const TURNS_PER_HOUR = 4;
 
-function status() {
+function status(c) {
     // let s = `It is currently {{turn}} turn. Time is {{HOUR}}. It's {{"day" "night" IS_DAY ?}}
     //  You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
     //  Energy: {{stats.energy}}
     //  `
+    console.log("Status",c==ctx,c,ctx)
  let s = `Time is {{HOUR}} o'clock. It's {{"day" "night" IS_DAY ?}}. You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
 
     return screept.interpolate(s, ctx)

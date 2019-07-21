@@ -10,6 +10,7 @@ export default
             {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"$inventory.meal--; $stats.energy+=3; $stats.energy = $stats.energy > 10  ? 10 : $stats.energy"},
             {text:"Rest an hour",if:"$stats.energy < 10",run:"$TURN(4); $stats.energy ++"},
             {text:"Wait an hour",run:"$TURN(4)"},
+            {each:"(value,i) in  Object.keys($inventory)",text:"Buy {{$value}} at  {{$i}}"},
             {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=15"},
             {text:"Save Game",run:"$SAVE()"},
             {text:"Load Game",run:"$LOAD()"},

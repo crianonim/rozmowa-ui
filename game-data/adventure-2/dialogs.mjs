@@ -7,12 +7,12 @@ export default
         ],
         options:[
             {text:"Look at yourself.",go:"look-at-self"},
-            // {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"inventory.meal -1 INC_BY; stats.energy 3 INC_BY ; 10 stats.energy stats.energy 10 > ? DEBUG stats.energy :="},
-            // {text:"Rest an hour",if:"stats.energy 10 <",run:"4 TURN; stats.energy INC"},
+            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"$inventory.meal--; $stats.energy+=3; $stats.energy = $stats.energy > 10  ? 10 : $stats.energy"},
+            {text:"Rest an hour",if:"$stats.energy < 10",run:"$TURN(4); $stats.energy ++"},
             {text:"Wait an hour",run:"$TURN(4)"},
-            // {text:"Sleep until morning",run:"1 flags.sleeping :=;WAIT_UNTIL_MORNING;0 flags.sleeping := ; 15 stats.energy :="},
-            // {text:"Save Game",run:"SAVE"},
-            // {text:"Load Game",run:"LOAD"},
+            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=15"},
+            {text:"Save Game",run:"$SAVE()"},
+            {text:"Load Game",run:"$LOAD()"},
             {text:"Back",go:"return"},
         ]
     },

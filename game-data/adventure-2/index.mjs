@@ -83,9 +83,10 @@ function init() {
     screept.addVerb("DAY_NUMBER",0,()=>{
         return 1+(ctx.turn / TURNS_PER_HOUR / 24 )>>0
     })
-    screept.addVerb("WAIT_UNTIL_MORNING",0,()=>{
-        waitUntilMorning();
-    })
+    ctx.WAIT_UNTIL_MORNING = ()=>waitUntilMorning();
+    // screept.addVerb("WAIT_UNTIL_MORNING",0,()=>{
+        // waitUntilMorning();
+    // })
     //take percentage and return true or false 
     ctx.TEST_ROLL = (a)=> Math.random()*100 < a;
         
@@ -101,16 +102,27 @@ function init() {
     ctx.INVENTORY=()=>{
         return Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ")
     }
-    screept.addVerb("SAVE",0,()=>{
-        localStorage.setItem('save',JSON.stringify(ctx))
-    })
-    screept.addVerb("LOAD",0,()=>{
+    ctx.SAVE = ()=>{
+       localStorage.setItem('save',JSON.stringify(ctx))
+    }
+    // screept.addVerb("SAVE",0,()=>{
+        // localStorage.setItem('save',JSON.stringify(ctx))
+    // })
+
+    ctx.LOAD = ()=>{
         let save=JSON.parse(localStorage.getItem('save'));
         Object.keys(ctx).forEach(key=>{
             ctx[key]=save[key];
         });
+        init();
+    }
+    // screept.addVerb("LOAD",0,()=>{
+    //     let save=JSON.parse(localStorage.getItem('save'));
+    //     Object.keys(ctx).forEach(key=>{
+    //         ctx[key]=save[key];
+    //     });
         
-    })
+    // })
     function nextTurn(){
         console.log("Turn passed, new turn ", ++ctx.turn);
             if (ctx.turn % (TURNS_PER_HOUR*24)===TURNS_PER_HOUR*22){

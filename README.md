@@ -1,4 +1,7 @@
-# prosta-gra
+# Text-Game
+
+Simple text dialog based game, with declerative mechanics and scenario
+
 
 ## Project setup
 ```

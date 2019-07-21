@@ -6,21 +6,29 @@ export default
 
         ],
         options:[
-            {text:"plant",go:"plant"},
-            {text:"harvest",go:"harvest"},
             {text:"Look at yourself.",go:"look-at-self"},
-            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"$inventory.meal--; $stats.energy+=3; $stats.energy = $stats.energy > 10  ? 10 : $stats.energy"},
-            {text:"Rest an hour",if:"$stats.energy < 10",run:"$TURN(4); $stats.energy ++"},
+            {text:"Eat",go:"eat"},
+            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 100 ",run:"$inventory.meal--; $stats.energy+=30); $stats.energy = $stats.energy > 100  ? 100 : $stats.energy"},
+            {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $stats.energy+=10"},
             {text:"Wait an hour",run:"$TURN(4)"},
-            {each:"(v,k) in  Object.entries($inventory)",if:"$v[1]>0",text:"You have {{$v[0]}} at  {{$v[1]}} index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
-            {each:"(v,k) in  Object.keys($inventory)",text:"You have {{$v}}  index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
-            {each:"(v,k) in  $farm",if:"!$v.plant",text:"Plant something", run:"$DEBUG($k);$DEBUG($v)"},
-            
-            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=15"},
+            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=120",go:"return"},
             {text:"Save Game",run:"$SAVE()"},
             {text:"Load Game",run:"$LOAD()"},
+            {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
             {text:"Back",go:"return"},
         ]
+    },
+    {
+        id:"eat",
+        intro:[
+            {text:"What do you want to eat?"},
+        ],
+        options:[
+            {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $types[va[0]] && $types[va[0]].foodValue)",
+              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$stats.energy+=$types[$v[0]].foodValue;$inventory[$v[0]]--;$TURN(1)"},
+            {text:"Nothing",go:"return"}
+        ]
+
     },
     {
         id:"farm",
@@ -30,7 +38,8 @@ export default
         options:[
             {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},
             {text:`Harvest`,if:"$farm.find(plot=>plot.stage===10)",go:"harvest"},
-            {text:`Grow`,run:"$PLANTS_GROW()"}
+            // {text:`Grow`,run:"$PLANTS_GROW()"},
+            {text:`Back`,go:`return`},
         ]
     },
     
@@ -41,17 +50,34 @@ export default
             {text:`No seeds chosen.`}
         ],
         options:[
-            {text:"Nothing."},
-            {each:"(v,k) in  $farm",if:"!$v.plant && $inventory[$planting]",text:"Plant {{$planting}}", run:"$DEBUG($k);$DEBUG($v); $PLANT($k,$planting); $TURN(5);$inventory[$planting]--"},
+            {text:"Change seeds",go:"choose_planting"},
+            {each:"(v,k) in  $farm",if:"!$v.plant && $inventory[$planting]",text:"Plant {{$planting}}", run:`$DEBUG($k);$DEBUG($v); 
+              $PLANT($k,$planting); $TIRE(1); $TURN(5);$inventory[$planting]--`},
             {text:"Back",go:"return"}
         ]
-    },{
+    },
+    {
+        id:"choose_planting",
+        intro:[
+            {text:`Currently planting {{$planting}} and you have {{$inventory[$planting]}} `,if:"$planting"},
+            {text:`No seeds chosen.`}
+            
+        ], options:[
+            {text:"Nothing.",run:"$planting=null"},
+            {each:"(v,k) in Object.keys($inventory).filter(item=>item.includes('_seed'))",text:`You have {{$inventory[$v]}} of {{$v}}`,
+              run:"$planting=$v",go:"return"},
+            {text:"Back",go:"return"}
+
+        ]
+    },
+    
+    {
         id:"harvest",
         intro:[
             {text:`What you want to harvest?`}
         ],
         options:[
-            {each:"(v,k) in $farm", if:"$v.stage===10",text:"Harvest {{$v.plant}}",run:"$DEBUG($k);$HARVEST($k)"},
+            {each:"(v,k) in $farm", if:"$v.stage===10",text:"Harvest {{$v.plant}}",run:"$DEBUG($k);$HARVEST($k);$TIRE(2);$TURN(1)"},
             {text:"Back",go:"return"}
         ]
     },
@@ -85,7 +111,7 @@ export default
             run:"$TURN(1)",
 
             intro: [
-                { text: `You look {{ $stats.energy > 4 ?  "rested" : "tired"}}, no obvious damage. {{$flags.dirty ? "You are dirty." : "" }}` }
+                { text: `You look {{ $stats.energy > 40 ?  "rested" : "tired"}}, no obvious damage. {{$flags.dirty ? "You are dirty." : "" }}` }
             ],
             options: [
                 { text: "Back", go: "return" }
@@ -97,9 +123,11 @@ export default
                 { text: `You are in the village. {{$IS_DAY()?"There are some people around." : "Everyone gone inside for the night"}}` }
             ],
             options: [
-                { text: `Talk to {{!$flags.met_bernie ? "an elderly man" : "Bernie"}} sitting on a bench on the green`, go: "talk_bernie", if:"!$flags.bartender_favor_bernie_finished" },
+                { text: `Talk to {{!$flags.met_bernie ? "an elderly man" : "Bernie"}} sitting on a bench on the green`,
+                  go: "talk_bernie", if:"!$flags.bartender_favor_bernie_finished" },
                 { text:`Go to the pond.`,go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
+                {text:`Go to your farm.`,go:"farm"},
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
@@ -114,7 +142,8 @@ export default
             ],
             options: [
                 { text: "Can you tell me what is this place?", go: "bernie_what_is_this_place" },
-                { text:"The bartender says he is sorry and would like to go the the inn for a meal",if:"$flags.bartender_favor_bernie_asked  & !$flags.bartender_favor_bernie_finished",go:"bernie_agrees"},
+                { text:"The bartender says he is sorry and would like to go the the inn for a meal",
+                if:"$flags.bartender_favor_bernie_asked  & !$flags.bartender_favor_bernie_finished",go:"bernie_agrees"},
                 { text: "Nothing, I'm leaving", go: "return" }
             ]
         },
@@ -166,7 +195,7 @@ export default
 
         {  
             id: "fishing",
-            run :`$TURN(2); $catch = $TEST_ROLL(50) ? 1 : 0; $inventory.fish+=$catch`,
+            run :`$TURN(2); $catch = $TEST_ROLL(50) ? 1 : 0; $inventory.fish+=$catch; $TIRE(2)`,
             intro: [
                 { text: "You caught a fish!",if:"$catch" },
                 { text:"Sorry, no bonus"},

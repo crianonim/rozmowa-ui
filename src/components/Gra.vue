@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Dialog from "rozmowa/index.mjs";
+import Dialog from "../lib/dialog.js";
 import Debug from './Debug';
 import gameData from "../../game-data/adventure-2/index.mjs";
 

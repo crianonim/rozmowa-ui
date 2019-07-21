@@ -1,7 +1,6 @@
 import dialogs from './dialogs.mjs';
-import rozmowa from 'rozmowa/index.mjs';
+import * as screept from '../../src/lib/screept';
 // import screept from 'screept/index.mjs';
-const screept = rozmowa.screept;
 // console.log("ROZMOWA",rozmowa);
 
 // const dialogName = "start";
@@ -44,11 +43,11 @@ function status() {
     //  You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ") }
     //  Energy: {{stats.energy}}
     //  `
- let s = `
- {{"You have passed out, falling asleep where you where! " "" flags.passedOut ?}}{{0 flags.passedOut :=; ""}}
- Time is {{HOUR}} o'clock. It's {{DAY_NUMBER}} {{"day" "night" IS_DAY ?}}.
-  You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
-
+//  let s = `
+//  {{"You have passed out, falling asleep where you where! " "" flags.passedOut ?}}{{0 flags.passedOut :=; ""}}
+//  Time is {{HOUR}} o'clock. It's {{DAY_NUMBER}} {{"day" "night" IS_DAY ?}}.
+//   You have {{inventory.money}} coins. Energy: {{stats.energy}}`;
+    let s="JAN"
     return screept.interpolate(s, ctx)
 }
 
@@ -62,19 +61,25 @@ function init() {
         a.object[a.key] = Number(a.value || 0) + Number(b.value || 0);
         return a.object[a.key];
     });
-    screept.addVerb("TURN", 1, (a) => {
-        for (let i = 0; i < a.value; i++) {
+    ctx.TURN= (x)=>{
+        for (let i = 0; i < x; i++) {
             nextTurn();
         }
-    })
+    }
+    
     screept.addVerb("HOUR", 0, () => {
         return ((ctx.turn / TURNS_PER_HOUR) >> 0) % 24;
     })
-    screept.addVerb("IS_DAY", 0, () => {
+    ctx.IS_DAY = ()=>{
         let hour = ((ctx.turn / TURNS_PER_HOUR) >> 0) % 24;
         if (hour > 5 && hour < 20) return true;
         return false;
-    })
+    }
+    // screept.addVerb("IS_DAY", 0, () => {
+    //     let hour = ((ctx.turn / TURNS_PER_HOUR) >> 0) % 24;
+    //     if (hour > 5 && hour < 20) return true;
+    //     return false;
+    // })
     screept.addVerb("DAY_NUMBER",0,()=>{
         return 1+(ctx.turn / TURNS_PER_HOUR / 24 )>>0
     })
@@ -82,17 +87,20 @@ function init() {
         waitUntilMorning();
     })
     //take percentage and return true or false 
-    screept.addVerb("TEST_ROLL", 1, (a) => {
-        let roll = Math.random() * 100;
-        return roll < a.value;
-    })
+    ctx.TEST_ROLL = (a)=> Math.random()*100 < a;
+        
+    
+    // screept.addVerb("TEST_ROLL", 1, (a) => {
+        // let roll = Math.random() * 100;
+        // return roll < a.value;
+    // })
     screept.addVerb("DEBUG", 1, (a) => {
         console.log("DEBUG",a.value)
         return a.value;
     })
-    screept.addVerb("INVENTORY",0,()=>{
+    ctx.INVENTORY=()=>{
         return Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]).join(", ")
-    })
+    }
     screept.addVerb("SAVE",0,()=>{
         localStorage.setItem('save',JSON.stringify(ctx))
     })

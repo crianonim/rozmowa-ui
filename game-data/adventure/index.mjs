@@ -1,8 +1,5 @@
 import dialogs from './dialogs.mjs';
-import rozmowa from 'rozmowa/index.mjs';
-// import screept from 'screept/index.mjs';
-const screept=rozmowa.screept;
-console.log("ROZMOWA",rozmowa);
+import screept from '../../src/lib/screept';
 
 const dialogName = "adventure";
 

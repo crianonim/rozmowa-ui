@@ -16,21 +16,34 @@ function processDialog(data,dialogName,ctx={}){
     dialog.options.forEach(option=>{
         if (option.each){
             let [_,first,array]=option.each.match(/^\((.*)\) in (.*)/);
-            let [value,key]=first.split(/\s?,\s?/);
+            let [_v,_k]=first.split(/\s?,\s?/);
             console.log("FIRST",first);
-            console.log(`x${value}x x${key}x`)
+            console.log(`x${_v}x x${_k}x`)
             console.log("ARR",array);
-            let arr=screept.run(array);
-            arr.forEach( (v,i)=>{
-                ctx[value]=v;
-                ctx[key]=i
-                option.push(option);
+            let arr=screept.run(array,ctx);
+            console.log("ARRR",arr)
+            arr.forEach( (value,key)=>{
+                let nO=JSON.parse(JSON.stringify(option));
+                ctx[_v]=value;
+                ctx[_k]=key
+                nO.textInterpolated=screept.interpolate(nO.text,ctx);
+                let pre="$"+_v+"="+JSON.stringify(value)+"; $"+_k+"="+JSON.stringify(key)+";"
+                if (nO.run) {
+                    nO.run=pre+nO.run;
+                }
+                if (nO.if){
+                    nO.if=pre+nO.if;
+                }
+                console.log("NO",nO)
+                options.push(nO);
             })
-            ctx[value]
         }
-        else options.push(option);
+        else {
+            option.textInterpolated=screept.interpolate(option.text,ctx);
+            options.push(option);
+        };
     })
-    options=options.filter(option=>option.if?screept.run(option.if,ctx):true).map(option=>{option.textInterpolated=screept.interpolate(option.text,ctx);return option});
+    options=options.filter(option=>option.if?screept.run(option.if,ctx):true);
     return {intro,options};
 }
 function processOptionChoice(option,ctx){

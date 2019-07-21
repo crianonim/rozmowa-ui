@@ -66,7 +66,9 @@ function init() {
             nextTurn();
         }
     }
-    
+    ctx.DEBUG=(x)=>{
+        console.log("DEBUG:",x);
+    }
     screept.addVerb("HOUR", 0, () => {
         return ((ctx.turn / TURNS_PER_HOUR) >> 0) % 24;
     })

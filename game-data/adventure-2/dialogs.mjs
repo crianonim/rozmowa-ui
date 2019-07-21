@@ -10,7 +10,9 @@ export default
             {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"$inventory.meal--; $stats.energy+=3; $stats.energy = $stats.energy > 10  ? 10 : $stats.energy"},
             {text:"Rest an hour",if:"$stats.energy < 10",run:"$TURN(4); $stats.energy ++"},
             {text:"Wait an hour",run:"$TURN(4)"},
-            {each:"(value,i) in  Object.keys($inventory)",text:"Buy {{$value}} at  {{$i}}"},
+            {each:"(v,k) in  Object.entries($inventory)",if:"$v[1]>0",text:"You have {{$v[0]}} at  {{$v[1]}} index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
+            {each:"(v,k) in  Object.keys($inventory)",text:"You have {{$v}}  index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
+            
             {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=15"},
             {text:"Save Game",run:"$SAVE()"},
             {text:"Load Game",run:"$LOAD()"},

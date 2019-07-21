@@ -7,7 +7,7 @@ const ctx = { other: { met: -1 }, turn: 0, score: 0, backpack: 1, inventory: { m
 
 function status() {
     let s=`It is currently {{turn}} turn. You have {{score}} points.
-     You have: ${ Object.entries(ctx.inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]) }
+     You have: ${ Object.entries($inventory).filter(entry=>entry[1]).map(entry=>entry[0]+":"+entry[1]) }
      Energy: {{stats.energy}}
      `
     return screept.interpolate(s,ctx)

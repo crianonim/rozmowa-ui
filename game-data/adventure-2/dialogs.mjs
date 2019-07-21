@@ -6,17 +6,53 @@ export default
 
         ],
         options:[
+            {text:"plant",go:"plant"},
+            {text:"harvest",go:"harvest"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 10 ",run:"$inventory.meal--; $stats.energy+=3; $stats.energy = $stats.energy > 10  ? 10 : $stats.energy"},
             {text:"Rest an hour",if:"$stats.energy < 10",run:"$TURN(4); $stats.energy ++"},
             {text:"Wait an hour",run:"$TURN(4)"},
             {each:"(v,k) in  Object.entries($inventory)",if:"$v[1]>0",text:"You have {{$v[0]}} at  {{$v[1]}} index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
             {each:"(v,k) in  Object.keys($inventory)",text:"You have {{$v}}  index {{$k}}", run:"$DEBUG($k);$DEBUG($v)"},
+            {each:"(v,k) in  $farm",if:"!$v.plant",text:"Plant something", run:"$DEBUG($k);$DEBUG($v)"},
             
             {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=15"},
             {text:"Save Game",run:"$SAVE()"},
             {text:"Load Game",run:"$LOAD()"},
             {text:"Back",go:"return"},
+        ]
+    },
+    {
+        id:"farm",
+        intro:[
+            {text:`Growing {{$farm.map($PLANT_STATUS)}}`},
+        ],
+        options:[
+            {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},
+            {text:`Harvest`,if:"$farm.find(plot=>plot.stage===10)",go:"harvest"},
+            {text:`Grow`,run:"$PLANTS_GROW()"}
+        ]
+    },
+    
+    {
+        id:"plant",
+        intro:[
+            {text:`Currently planting {{$planting}} and you have {{$inventory[$planting]}}`,if:"$planting"},
+            {text:`No seeds chosen.`}
+        ],
+        options:[
+            {text:"Nothing."},
+            {each:"(v,k) in  $farm",if:"!$v.plant && $inventory[$planting]",text:"Plant {{$planting}}", run:"$DEBUG($k);$DEBUG($v); $PLANT($k,$planting); $TURN(5);$inventory[$planting]--"},
+            {text:"Back",go:"return"}
+        ]
+    },{
+        id:"harvest",
+        intro:[
+            {text:`What you want to harvest?`}
+        ],
+        options:[
+            {each:"(v,k) in $farm", if:"$v.stage===10",text:"Harvest {{$v.plant}}",run:"$DEBUG($k);$HARVEST($k)"},
+            {text:"Back",go:"return"}
         ]
     },
 //     {

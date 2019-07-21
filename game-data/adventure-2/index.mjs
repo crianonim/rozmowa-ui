@@ -6,7 +6,7 @@ import * as screept from '../../src/lib/screept';
 // const dialogName = "start";
 
 const ctx = {
-    dialogName:"start",
+    dialogName:"farm",
     stack:[],
     other: {
         met: -1
@@ -16,8 +16,12 @@ const ctx = {
         money: 20,
         sword: 0,
         fish: 1,
-        meal: 2
+        meal: 2,
+        cabbage_seed: 2,
+        cabbage:0
     },
+    planting:'cabbage_seed',    
+    farm:[{plant:"cabbage",stage:8},{plant:""}],
     stats: {
         energy: 6
     },
@@ -68,6 +72,31 @@ function init() {
     }
     ctx.DEBUG=(x)=>{
         console.log("DEBUG:",x);
+    }
+    ctx.PLANT=(plotKey,seed)=>{
+        let plant=seed.replace(/_seed/,'');
+        let plot=ctx.farm[plotKey];
+        plot.plant=plant;
+        plot.stage=0;
+        console.log("PLOT",plot)
+    }
+    ctx.PLANT_STATUS=(plant)=>{
+        return JSON.stringify(plant);
+    }
+    ctx.PLANTS_GROW=()=>{
+        ctx.farm.forEach(plot=>{
+            if (plot.plant){
+                plot.stage++;
+                if (plot.stage>10) plot.stage=10;
+            }
+        })
+    }
+    ctx.HARVEST=(plotKey)=>{
+        let plot=ctx.farm[plotKey];
+        ctx.inventory[plot.plant]++;
+        plot.plant="";
+        plot.stage=0;
+
     }
     screept.addVerb("HOUR", 0, () => {
         return ((ctx.turn / TURNS_PER_HOUR) >> 0) % 24;

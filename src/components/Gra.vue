@@ -69,7 +69,7 @@ export default {
       } else {
         result = Dialog.processOptionChoice(this.dialog.options[id], this.ctx);
       }
-
+      console.log("RESULT IS",result)
       if (result === "return") {
         this.ctx.dialogName = this.ctx.stack.pop();
       } else if (!result) {
@@ -79,9 +79,11 @@ export default {
           this.ctx.stack.push(this.ctx.dialogName);
         }
           this.ctx.dialogName = result;
+      } else if (result===true){
+        console.log("RUN RUN RUN",this.ctx.farm);
       }
       // if (!result) this.dialogName = null;
-
+  
       console.log(
         "CHOOSE OPTION",
         id,

@@ -25,7 +25,8 @@ const ctx = {
   planting: "cabbage_seed",
   farm: [{ plant: "cabbage", stage: 8 }, { plant: "" }],
   stats: {
-    energy: 60
+    energy: 60,
+    energy_max: 100,
   },
   types: {
     cabbage: {
@@ -90,6 +91,14 @@ function init() {
       nextTurn();
     }
   };
+  ctx.STAT = (stat,n) =>{
+    const stats=ctx.stats;
+    stats[stat]+=n;
+    if (stats[stat]>stats[stat+"_max"]){
+      stats[stat]=stats[stat+"_max"];
+    }
+    if (stats[stat]<0) stats[stat]=0;
+  }
   ctx.TIRE = x => {
       return ctx.stats.energy-=x;
   }

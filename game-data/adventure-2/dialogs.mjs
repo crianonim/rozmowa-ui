@@ -8,10 +8,10 @@ export default
         options:[
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
-            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 100 ",run:"$inventory.meal--; $stats.energy+=30); $stats.energy = $stats.energy > 100  ? 100 : $stats.energy"},
-            {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $stats.energy+=10"},
+            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 100 ",run:"$inventory.meal--; $STAT('energy',-40)"},
+            {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10"},
             {text:"Wait an hour",run:"$TURN(4)"},
-            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=120",go:"return"},
+            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
             {text:"Save Game",run:"$SAVE()"},
             {text:"Load Game",run:"$LOAD()"},
             {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
@@ -25,7 +25,7 @@ export default
         ],
         options:[
             {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $types[va[0]] && $types[va[0]].foodValue)",
-              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$stats.energy+=$types[$v[0]].foodValue;$inventory[$v[0]]--;$TURN(1)"},
+              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$types[$v[0]].foodValue);$inventory[$v[0]]--;$TURN(1)"},
             {text:"Nothing",go:"return"}
         ]
 

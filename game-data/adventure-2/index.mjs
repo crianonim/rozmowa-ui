@@ -11,6 +11,7 @@ const ctx = {
   other: {
     met: -1
   },
+  depth:0,
   turn: 25,
   inventory: {
     money: 20,

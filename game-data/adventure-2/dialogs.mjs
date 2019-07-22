@@ -145,6 +145,7 @@ export default
                 { text:`Go to the inn.`,go:"inn"},
                 { text:`Go to the shop.`,run:"$traderName='Zach'",go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},
+                {text:`Go to the forest`,go:"forest"}
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
@@ -292,6 +293,16 @@ export default
                 // { text: "Thanks.", go: "return" }
             ]
         },
-        
+        {
+            id:"forest",
+            intro: [
+                {text:`You are at the {{$depth}}.`}
+            ],
+            options:[
+                {text:"Go deeper",run:"$depth++",go:"forest"},
+                {text:"Go back to the village",if:"!$depth",go:"village"},
+                {text:"Go back a bit",if:"$depth",run:"$depth--",go:"forest"}
+            ]
+        }
         
     ]

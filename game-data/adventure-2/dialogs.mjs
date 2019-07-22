@@ -70,6 +70,21 @@ export default
 
         ]
     },
+    {
+        id:"trade",
+        intro:[
+            {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
+        ],
+        options:[
+            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$types[$v].price",
+               text:"Buy 1 {{$v}} for {{$types[$v].price}} .",run:"$INV($v,1);$INV('money',-$types[$v].price)"},
+
+            {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$types[$v].price}}",
+              run:"$INV($v,-1);$INV('money',$types[$v].price)"}, 
+            {text:"Back",go:"return"}
+        ]
+
+    },
     
     {
         id:"harvest",
@@ -127,6 +142,7 @@ export default
                   go: "talk_bernie", if:"!$flags.bartender_favor_bernie_finished" },
                 { text:`Go to the pond.`,go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
+                { text:`Go to the shop.`,go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]

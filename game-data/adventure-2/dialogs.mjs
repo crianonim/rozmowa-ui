@@ -8,7 +8,7 @@ export default
         options:[
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
-            {text:"Eat a meal",if:"$inventory.meal > 0 & $stats.energy < 100 ",run:"$inventory.meal--; $STAT('energy',-40)"},
+            {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
             {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10"},
             {text:"Wait an hour",run:"$TURN(4)"},
             {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
@@ -25,7 +25,7 @@ export default
         ],
         options:[
             {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $types[va[0]] && $types[va[0]].foodValue)",
-              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$types[$v[0]].foodValue);$inventory[$v[0]]--;$TURN(1)"},
+              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$types[$v[0]].foodValue);$INV([$v[0]],-1);$TURN(1)"},
             {text:"Nothing",go:"return"}
         ]
 
@@ -38,7 +38,7 @@ export default
         options:[
             {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},
             {text:`Harvest`,if:"$farm.find(plot=>plot.stage===10)",go:"harvest"},
-            // {text:`Grow`,run:"$PLANTS_GROW()"},
+            {text:`Grow`,run:"$PLANTS_GROW()"},
             {text:`Back`,go:`return`},
         ]
     },
@@ -46,25 +46,25 @@ export default
     {
         id:"plant",
         intro:[
-            {text:`Currently planting {{$planting}} and you have {{$inventory[$planting]}}`,if:"$planting"},
+            {text:`Currently planting {{$planting}} and you have {{$INV($planting)}}`,if:"$planting"},
             {text:`No seeds chosen.`}
         ],
         options:[
             {text:"Change seeds",go:"choose_planting"},
-            {each:"(v,k) in  $farm",if:"!$v.plant && $inventory[$planting]",text:"Plant {{$planting}}", run:`$DEBUG($k);$DEBUG($v); 
-              $PLANT($k,$planting); $TIRE(1); $TURN(5);$inventory[$planting]--`},
+            {each:"(v,k) in  $farm",if:"!$v.plant && $INV($planting)",text:"Plant {{$planting}}", run:`$DEBUG($k);$DEBUG($v); 
+              $PLANT($k,$planting); $TIRE(1); $TURN(5);$INV($planting,-1)`},
             {text:"Back",go:"return"}
         ]
     },
     {
         id:"choose_planting",
         intro:[
-            {text:`Currently planting {{$planting}} and you have {{$inventory[$planting]}} `,if:"$planting"},
+            {text:`Currently planting {{$planting}} and you have {{$INV($planting)}} `,if:"$planting"},
             {text:`No seeds chosen.`}
             
         ], options:[
             {text:"Nothing.",run:"$planting=null"},
-            {each:"(v,k) in Object.keys($inventory).filter(item=>item.includes('_seed'))",text:`You have {{$inventory[$v]}} of {{$v}}`,
+            {each:"(v,k) in Object.keys($inventory).filter(item=>item.includes('_seed'))",text:`You have {{$INV($v)}} of {{$v}}`,
               run:"$planting=$v",go:"return"},
             {text:"Back",go:"return"}
 
@@ -195,7 +195,7 @@ export default
 
         {  
             id: "fishing",
-            run :`$TURN(2); $catch = $TEST_ROLL(50) ? 1 : 0; $inventory.fish+=$catch; $TIRE(2)`,
+            run :`$TURN(2); $catch = $TEST_ROLL(50) ? 1 : 0; $INV('fish',$catch); $TIRE(2)`,
             intro: [
                 { text: "You caught a fish!",if:"$catch" },
                 { text:"Sorry, no bonus"},
@@ -249,7 +249,7 @@ export default
                 { text :`"I always can buy fish from you.{{!$flags.bartender_favor_bernie_finished ? "Go and tell Bernie I'm sorry, ask him to come here and you both will get free meal." : ""  }}"`},
             ],
             options: [
-                {text:`Sell 1 fish`,if:"$inventory.fish > 0",run:"$inventory.fish--;$inventory.money+=3"},
+                {text:`Sell 1 fish`,if:"$INV('fish') > 0",run:"$INV('fish',-1);$INV('money',3)"},
                 {text:"I understand.",go:"return"}
             ]
         },
@@ -259,12 +259,12 @@ export default
                 { text :`"I have meals for 5 gold."`}
             ],
             options: [
-                {text:`Buy 1 meal`,if:"$inventory.money > 4",run:"$inventory.money-=5;$inventory.meal++"},
+                {text:`Buy 1 meal`,if:"$INV('money') > 4",run:"$INV('money',-5);$INV('meal',1)"},
                 {text:"Thanks.",go:"return"}
             ]
         },
         {
-            run:"$flags.bartender_favor_bernie_finished=1; $inventory.meal++",
+            run:"$flags.bartender_favor_bernie_finished=1; $INV('meal',1)",
             id: "task_bartender_favor_bernie_finished",
             intro: [
                 { text: `You both went to the inn. The Bartender says "Thanks for that! Meals for you!" and gives you a nice hot meal.` }

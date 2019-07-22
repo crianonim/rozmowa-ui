@@ -18,9 +18,7 @@ const ctx = {
     fish: 1,
     meal: 2,
     cabbage_seed: 2,
-    cabbage: 0,
     radish_seed: 1,
-    radish: 0
   },
   planting: "cabbage_seed",
   farm: [{ plant: "cabbage", stage: 8 }, { plant: "" }],
@@ -99,6 +97,17 @@ function init() {
     }
     if (stats[stat]<0) stats[stat]=0;
   }
+  ctx.INV = (item,n)=>{
+    const inventory=ctx.inventory;
+    if (!n){
+      return inventory[item] || 0;
+    }
+    else {
+      let count= inventory[item] || 0;
+      inventory[item]=count+Number(n);
+      if (inventory[item]<0) inventory[item]=0;
+    }
+  }
   ctx.TIRE = x => {
       return ctx.stats.energy-=x;
   }
@@ -125,7 +134,7 @@ function init() {
   };
   ctx.HARVEST = plotKey => {
     let plot = ctx.farm[plotKey];
-    ctx.inventory[plot.plant]++;
+    ctx.INV(plot.plant,1);
     plot.plant = "";
     plot.stage = 0;
   };

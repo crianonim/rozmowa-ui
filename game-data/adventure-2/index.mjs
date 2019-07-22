@@ -20,13 +20,21 @@ const ctx = {
     cabbage_seed: 2,
     radish_seed: 1,
   },
-  trader:{
+  traders:[
+    {
     name:"Zach",
     sells:[
       "cabbage_seed", "radish_seed" // make tags #veg
     ],
     buys:["cabbage","fish","radish"]
   },
+{
+  name:"Bartender",
+  sells:["meal"],
+  buys:["fish","cabbage"]
+}
+],
+  
   planting: "cabbage_seed",
   farm: [{ plant: "cabbage", stage: 8 }, { plant: "" }],
   stats: {

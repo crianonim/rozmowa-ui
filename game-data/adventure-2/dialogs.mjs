@@ -72,6 +72,7 @@ export default
     },
     {
         id:"trade",
+        run:"$trader=$traders.find(t=>t.name===$traderName)",
         intro:[
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],
@@ -142,7 +143,7 @@ export default
                   go: "talk_bernie", if:"!$flags.bartender_favor_bernie_finished" },
                 { text:`Go to the pond.`,go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
-                { text:`Go to the shop.`,go:"trade"},
+                { text:`Go to the shop.`,run:"$traderName='Zach'",go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
@@ -229,6 +230,7 @@ export default
             options: [
                 { text: "Talk to the bartender",go:"bartender_talk"},
                 { text: "Talk to Bernie", go:"talk_bernie",if:"$flags.bartender_favor_bernie_finished"},
+                {text:"Trade",run:"$traderName='Bartender'",go:"trade"},
                 { text: "Back to village", go: "village" }
             ]
         },

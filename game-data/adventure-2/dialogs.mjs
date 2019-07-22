@@ -33,7 +33,7 @@ export default
     {
         id:"farm",
         intro:[
-            {text:`Growing {{$farm.map($PLANT_STATUS)}}`},
+            {text:`Your farm has {{$farm.length}} plots. Growing {{$farm.map($PLANT_STATUS).join(', ')}}`},
         ],
         options:[
             {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},

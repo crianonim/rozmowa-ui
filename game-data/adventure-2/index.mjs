@@ -135,7 +135,11 @@ function init() {
     console.log("PLOT", plot);
   };
   ctx.PLANT_STATUS = plant => {
-    return JSON.stringify(plant);
+    if (plant.plant){
+      return `${plant.plant} (${plant.stage}/10)`;
+
+    }
+     else  return`- empty -`
   };
   ctx.PLANTS_GROW = () => {
     ctx.farm.forEach(plot => {

@@ -123,6 +123,28 @@ export function addFunctions(ctx, CFG) {
         })
         ctx.INV(item, 1);
     }
+    ctx.COMBAT_ROUND = ()=>{
+        // let dmg=$RND(10)+1;$TIRE(1);$STAT('energy',-dmg,$opponent);$message='You hit for '+dmg+'. ';let get=$RND(10)+1;$TIRE(get);$message+=$opponent.name+' hits you with '+get+' '"
+        //player attacks
+        let player_dmg = ctx.RND(10);
+        ctx.STAT('energy',-player_dmg,ctx.opponent);
+        ctx.message=`You hit ${ctx.opponent.name} for ${player_dmg} damage. `;
+        if (ctx.opponent.stats.energy>0){
+            let opp_dmag=ctx.RND(10);
+            ctx.STAT('energy',-opp_dmag);
+            ctx.message+=` You are hit for ${opp_dmag} damage. `;
+        } else {
+            ctx.message+=` You defeated ${ctx.opponent.name}!`;
+            ctx.combat_won=true;
+        }
+        if (ctx.stats.energy<1){
+            ctx.message+=` You have been defeated! `;
+            ctx.combat_lost=true;
+            waitUntilMorning();
+            ctx.stats.energy=(ctx.stats.energy_max/2)>>0;
+        }
+
+    }
 
     function nextTurn() {
         console.log("Turn passed, new turn ", ++ctx.turn);

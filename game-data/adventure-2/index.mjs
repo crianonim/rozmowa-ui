@@ -230,6 +230,11 @@ function init() {
     ctx.message=`You found ${stone} stones.`;
     ctx.INV('stone',stone);
   }
+  ctx.FORAGE = () => {
+    let stick = (Math.random()*(ctx.depth+2))>>0;
+    ctx.message=`You found ${stick} sticks.`;
+    ctx.INV('stick',stick);
+  }
   function nextTurn() {
     console.log("Turn passed, new turn ", ++ctx.turn);
     if (ctx.turn % (TURNS_PER_HOUR * 24) === TURNS_PER_HOUR * 6) {

@@ -24,7 +24,7 @@ export default
             {text:"{{$message}}"}
         ],
         options:[
-            {text:"OK",go:"return"}
+            {text:"OK",run:"$message=''",go:"return"}
         ]
     },
     {
@@ -310,6 +310,7 @@ export default
             ],
             options:[
                 {text:"Go deeper",run:"$depth++",go:"forest"},
+                {text:"Forage",run:"$FORAGE();",go:"message"},
                 {text:"Go back to the village",if:"!$depth",go:"village"},
                 {text:"Go back a bit",if:"$depth",run:"$depth--",go:"forest"}
             ]

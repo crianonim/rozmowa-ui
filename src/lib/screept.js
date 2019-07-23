@@ -11,5 +11,3 @@ export function interpolate(s, ctx) {
         return result;
     })
 }
-
-export function addVerb(){};

@@ -12,7 +12,7 @@ export default
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
-            {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10"},
+            {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10)"},
             {text:"Wait an hour",run:"$TURN(4)"},
             {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
             {text:"Save Game",run:"$SAVE()"},

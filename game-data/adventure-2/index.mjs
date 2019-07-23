@@ -1,5 +1,6 @@
 import dialogs from "./dialogs.mjs";
 import * as screept from "../../src/lib/screept";
+import {recipes} from './recipes.mjs';
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
@@ -81,13 +82,7 @@ const ctx = {
     bartender_favor_bernie_asked: 0,
     citaa_remembered: 0
   },
-  recipes: {
-    axe:[ ["stone",2],["stick",3]],
-    widget:[ ["stick",1] ],
-    cooked_fish:[ ["fish",1] ] // need to change format
-
-    
-  },
+  recipes: recipes,
 };
 
 const TURNS_PER_HOUR = 4;
@@ -245,8 +240,8 @@ function init() {
     ctx.INV('stick',stick);
   }
   ctx.CRAFT = (item) => {
-    let recipe=ctx.recipes[item];
-    recipe.forEach(ing=>{
+    let recipe=ctx.recipes.find(el=>el.name===item);
+    recipe.ing.forEach(ing=>{
       let [name,amount] = ing;
       ctx.INV(name,-amount);
     })

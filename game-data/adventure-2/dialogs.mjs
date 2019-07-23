@@ -45,12 +45,12 @@ export default
     {
         id:"craft",
         intro:[
-            {text:"Craft {{$crafting_station}}"}
+            {text:"Craft {{$crafting_station||''}}"}
         ],
         options:[
-            {each:"(v,k) in Object.entries($recipes)",
-             if:"$v[1].every(ing=>$INV(ing[0])>=ing[1])",
-            text:"{{$v[0]}}",run:"$CRAFT($v[0])"},
+            {each:"(v,k) in $recipes",
+             if:"( ($v.workstation || $crafting_station) ?$crafting_station==$v.workstation : true ) && $v.ing.every(ing=>$INV(ing[0])>=ing[1])",
+            text:"{{$v.name}}",run:"$CRAFT($v.name)"},
             {text:"Nothing",run:"$crafting_station=''",go:"return"}
         ]
     }, 

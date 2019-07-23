@@ -84,8 +84,10 @@ const ctx = {
   recipes: {
     axe:[ ["stone",2],["stick",3]],
     widget:[ ["stick",1] ],
+    cooked_fish:[ ["fish",1] ] // need to change format
+
     
-  }
+  },
 };
 
 const TURNS_PER_HOUR = 4;

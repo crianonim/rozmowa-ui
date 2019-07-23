@@ -7,6 +7,8 @@ export default
         ],
         options:[
             {text:"Craft",go:"craft"},
+            {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
+
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
@@ -43,12 +45,13 @@ export default
     {
         id:"craft",
         intro:[
-            {text:"Craft"}
+            {text:"Craft {{$crafting_station}}"}
         ],
         options:[
-            {each:"(v,k) in Object.entries($recipes)", if:"$DEBUG($v[1]);$v[1].every(ing=>$INV(ing[0])>=ing[1])",
+            {each:"(v,k) in Object.entries($recipes)",
+             if:"$v[1].every(ing=>$INV(ing[0])>=ing[1])",
             text:"{{$v[0]}}",run:"$CRAFT($v[0])"},
-            {text:"Nothing",go:"return"}
+            {text:"Nothing",run:"$crafting_station=''",go:"return"}
         ]
     }, 
     {

@@ -19,6 +19,15 @@ export default
         ]
     },
     {
+        id:"message",
+        intro:[
+            {text:"{{$message}}"}
+        ],
+        options:[
+            {text:"OK",go:"return"}
+        ]
+    },
+    {
         id:"eat",
         intro:[
             {text:"What do you want to eat?"},
@@ -312,6 +321,7 @@ export default
             ],
             options:[
                 {text:"Go deeper",run:"$depth++",go:"caves"},
+                {text:"Mine",run:"$MINE()",go:"message"},
                 {text:"Go back to the village",if:"!$depth",go:"village"},
                 {text:"Go back a bit",if:"$depth",run:"$depth--",go:"caves"}
             ]

@@ -20,6 +20,8 @@ const ctx = {
     meal: 2,
     cabbage_seed: 2,
     radish_seed: 1,
+    stick:5,
+    stone:10,
   },
   traders:[
     {
@@ -78,6 +80,11 @@ const ctx = {
     bartender_favor_bernie_finished: 0,
     bartender_favor_bernie_asked: 0,
     citaa_remembered: 0
+  },
+  recipes: {
+    axe:[ ["stone",2],["stick",3]],
+    widget:[ ["stick",1] ],
+    
   }
 };
 
@@ -234,6 +241,14 @@ function init() {
     let stick = (Math.random()*(ctx.depth+2))>>0;
     ctx.message=`You found ${stick} sticks.`;
     ctx.INV('stick',stick);
+  }
+  ctx.CRAFT = (item) => {
+    let recipe=ctx.recipes[item];
+    recipe.forEach(ing=>{
+      let [name,amount] = ing;
+      ctx.INV(name,-amount);
+    })
+    ctx.INV(item,1);
   }
   function nextTurn() {
     console.log("Turn passed, new turn ", ++ctx.turn);

@@ -5,8 +5,8 @@ export function addFunctions(ctx, CFG) {
             nextTurn();
         }
     };
-    ctx.STAT = (stat, n) => {
-        const stats = ctx.stats;
+    ctx.STAT = (stat, n, entity=ctx) => {
+        const stats = entity.stats;
         stats[stat] += n;
         if (stats[stat] > stats[stat + "_max"]) {
             stats[stat] = stats[stat + "_max"];
@@ -24,7 +24,7 @@ export function addFunctions(ctx, CFG) {
         }
     }
     ctx.TIRE = x => {
-        return ctx.stats.energy -= x;
+        return ctx.STAT('energy',-x);
     }
     ctx.DEBUG = x => {
         console.log("DEBUG:", x);
@@ -77,7 +77,7 @@ export function addFunctions(ctx, CFG) {
     // })
     //take percentage and return true or false
     ctx.TEST_ROLL = a => Math.random() * 100 < a;
-
+    ctx.RND = a => (Math.random()*a)>>0;
     ctx.INVENTORY = () => {
         return Object.entries(ctx.inventory)
             .filter(entry => entry[1])

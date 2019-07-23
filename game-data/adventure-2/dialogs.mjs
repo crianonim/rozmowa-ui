@@ -8,7 +8,7 @@ export default
         options:[
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
-
+            {text:"Fight",run:"$opponent=$npc.find(el=>el.name=='goblin')",go:"combat"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
@@ -96,7 +96,7 @@ export default
     },
     {
         id:"trade",
-        run:"$trader=$traders.find(t=>t.name===$traderName)",
+        run:"$trader=$npc.find(t=>t.name===$traderName)",
         intro:[
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],
@@ -109,6 +109,18 @@ export default
             {text:"Back",go:"return"}
         ]
 
+    },
+    {
+        id:"combat",
+        run:"$DEBUG($opponent)",
+        intro:[
+            {text:"{{$message}}You are fighting with {{$opponent.name}} that has {{$opponent.stats.energy}} energy",run:"$message=''"}
+        ],
+        options:[
+            {text:"You have won!",if:"$opponent.stats.energy<1",run:"$INV('money',$RND(10))",go:"return"},
+            {text:"Attack!",if:"$stats.energy>0 && $opponent.stats.energy>0",run:"let dmg=$RND(10)+1;$TIRE(1);$STAT('energy',-dmg,$opponent);$message='You hit for '+dmg+'. ';let get=$RND(10)+1;$TIRE(get);$message+=$opponent.name+' hits you with '+get+' '"},
+            {text:"You are defeated :(",if:"$stats.energy<1",run:"$WAIT_UNTIL_MORNING();$stats.energy=($stats.energy_max/2)>>0",go:"village"},
+        ]
     },
     
     {

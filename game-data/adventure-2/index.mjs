@@ -8,7 +8,9 @@ import {addFunctions} from './verbs.mjs';
 // const dialogName = "start";
 
 const ctx = {
-  dialogName: "village",
+  // dialogName: "village",
+  dialogName: "options",
+  message:'',
   stack: [],
   other: {
     met: -1
@@ -25,9 +27,8 @@ const ctx = {
     stick:5,
     stone:10,
   },
-  traders:[
-    {
-    name:"Zach",
+  npc:[
+    { name:"Zach",
     sells:[
       "cabbage_seed", "radish_seed" // make tags #veg
     ],
@@ -37,6 +38,17 @@ const ctx = {
   name:"Bartender",
   sells:["meal"],
   buys:["fish","cabbage"]
+},
+{
+  name:"goblin",
+  generic:true,
+  stats:{
+    energy:50,
+    energy_max:50,
+    attack:120,
+    defence:75,
+  }
+  
 }
 ],
   

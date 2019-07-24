@@ -8,7 +8,7 @@ export default
         options:[
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
-            {text:"Fight",run:"$opponent=$npc.find(el=>el.name=='goblin')",go:"combat"},
+            {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
@@ -35,9 +35,10 @@ export default
         intro:[
             {text:"What do you want to eat?"},
         ],
+        run:"$DEBUG($TYPE('cabbage'))",
         options:[
-            {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $types[va[0]] && $types[va[0]].foodValue)",
-              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$types[$v[0]].foodValue);$INV([$v[0]],-1);$TURN(1)"},
+            {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $TYPE(va[0]) && $TYPE(va[0]).foodValue)",
+              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$TYPE($v[0]).foodValue);$INV($v[0],-1);$TURN(1)"},
             {text:"Nothing",go:"return"}
         ]
 
@@ -61,7 +62,7 @@ export default
         ],
         options:[
             {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},
-            {text:`Harvest`,if:"$farm.find(plot=>plot.stage===10)",go:"harvest"},
+            {text:`Harvest`,if:"$farm.find($FINDER('stage',10))",go:"harvest"},
             {text:`Grow`,run:"$PLANTS_GROW()"},
             {text:`Back`,go:`return`},
         ]
@@ -96,34 +97,44 @@ export default
     },
     {
         id:"trade",
-        run:"$trader=$npc.find(t=>t.name===$traderName)",
+        run:"$trader=$npc.find($FINDER('name',$traderName))",
         intro:[
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],
         options:[
-            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$types[$v].price",
-               text:"Buy 1 {{$v}} for {{$types[$v].price}} .",run:"$INV($v,1);$INV('money',-$types[$v].price)"},
+            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$TYPE($v).price",
+               text:"Buy 1 {{$v}} for {{$TYPE($v).price}} .",run:"$INV($v,1);$INV('money',-$TYPE($v).price)"},
 
-            {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$types[$v].price}}",
-              run:"$INV($v,-1);$INV('money',$types[$v].price)"}, 
+            {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$TYPE($v).price}}",
+              run:"$INV($v,-1);$INV('money',$TYPE($v).price)"}, 
             {text:"Back",go:"return"}
         ]
 
     },
     {
         id:"combat",
-        run:"$DEBUG($opponent)",
+        run:"$DEBUG($opponent);$options=false;$DEBUG($options)",
         intro:[
             {text:"{{$message}} The fight is over!",if:"$combat_won||$combat_lost",run:"$message=''"},
             {text:"{{$message}}You are fighting with {{$opponent.name}} that has {{$opponent.stats.energy}} energy",run:"$message=''"}
         ],
         options:[
             // {text:"You have won!",if:"$opponent.stats.energy<1",run:"$INV('money',$RND(10))",go:"return"},
-            {text:"Attack!",if:"!$combat_won &&!$combat_lost && $stats.energy>0 && $opponent.stats.energy>0",run:"$COMBAT_ROUND()"},
+            {text:"Attack!",if:"!$COMBAT_IS_FINISHED()",run:"$COMBAT_ROUND()"},
+            {text:"Flee!",if:"!$COMBAT_IS_FINISHED()",go:"combat_flee"},
             // {text:"You are defeated :(",if:"$stats.energy<1",run:"$WAIT_UNTIL_MORNING();$stats.energy=($stats.energy_max/2)>>0",go:"village"},
-            {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false",go:"return"},
-            {text:"Oh well...",if:"$combat_lost",run:"",go:"return"}
+            {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false;$options=true",go:"return"},
+            {text:"Oh well...",if:"$combat_lost",run:"$options=true",go:"return"}
 
+        ]
+    },{
+        id:"combat_flee",
+        run:"$COMBAT_TRY_FLEE()",
+        intro:[
+            {text:"You try to flee. {{$message}}  ",run:"$message=''"}
+        ],
+        options:[
+            {text:"OK",go:"return"}
         ]
     },
     
@@ -336,14 +347,17 @@ export default
         },
         {
             id:"forest",
+            run:"$TEST_ROLL(($depth+1)*10)?$COMBAT_START('goblin'):false",
             intro: [
+                {text:`You are at the {{$depth}}. You are being attacked by {{$opponent.name}}`,if:"$combat_forced"},
                 {text:`You are at the {{$depth}}.`}
             ],
             options:[
-                {text:"Go deeper",run:"$depth++",go:"forest"},
-                {text:"Forage",run:"$FORAGE();",go:"message"},
-                {text:"Go back to the village",if:"!$depth",go:"village"},
-                {text:"Go back a bit",if:"$depth",run:"$depth--",go:"forest"}
+                {text:"Go deeper",run:"$depth++",if:"!$combat_forced",go:"forest"},
+                {text:"Forage",run:"$FORAGE();",if:"!$combat_forced",go:"message"},
+                {text:"Go back to the village",if:"!$depth && !$combat_forced",go:"village"},
+                {text:"Go back a bit",if:"$depth && !$combat_forced",run:"$depth--",go:"forest"},
+                {text:"Fight!",if:"$combat_forced",run:"$combat_forced=false",go:"combat"}
             ]
         },
         {

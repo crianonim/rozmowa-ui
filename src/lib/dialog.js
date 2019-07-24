@@ -10,7 +10,8 @@ function processDialog(data,dialogName,ctx={}){
     if (!dialog) return;
     runCond(dialog.run)
     let intro=dialog.intro.find(intro=>intro.if?screept.run(intro.if,ctx):true);
-    intro.textInterpolated=screept.interpolate(intro.text,ctx);
+    intro.textInterpolated=screept.interpolate(intro.text,ctx).split('^nl').join('<br>');
+    console.log("TI",intro.textInterpolated)
     runCond(intro.run)
     let options=[]
     dialog.options.forEach(option=>{
@@ -26,7 +27,7 @@ function processDialog(data,dialogName,ctx={}){
                 let nO=JSON.parse(JSON.stringify(option));
                 ctx[_v]=value;
                 ctx[_k]=key
-                nO.textInterpolated=screept.interpolate(nO.text,ctx);
+                nO.textInterpolated=screept.interpolate(nO.text,ctx).split('^nl').join('<br>');
                 let pre="$"+_v+"="+JSON.stringify(value)+"; $"+_k+"="+JSON.stringify(key)+";"
                 if (nO.run) {
                     nO.run=pre+nO.run;
@@ -39,7 +40,7 @@ function processDialog(data,dialogName,ctx={}){
             })
         }
         else {
-            option.textInterpolated=screept.interpolate(option.text,ctx);
+            option.textInterpolated=screept.interpolate(option.text,ctx).split('^nl').join('<br>');
             options.push(option);
         };
     })

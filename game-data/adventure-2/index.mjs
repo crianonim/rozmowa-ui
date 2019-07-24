@@ -2,15 +2,18 @@ import dialogs from "./dialogs.mjs";
 import * as screept from "../../src/lib/screept";
 import {recipes} from './recipes.mjs';
 import {addFunctions} from './verbs.mjs';
+import {types} from './types.mjs';
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
 // const dialogName = "start";
 
 const ctx = {
-  // dialogName: "village",
-  dialogName: "options",
+  dialogName: "village",
+  // dialogName: "options",
+  options:true,
   message:'',
+  messages:[],
   stack: [],
   other: {
     met: -1
@@ -58,32 +61,7 @@ const ctx = {
     energy: 60,
     energy_max: 100,
   },
-  types: {
-    cabbage: {
-      foodValue: 10,
-      grow: 2,
-      price: 5
-    },
-    cabbage_seed:{
-      price:7
-    },
-    radish_seed:{
-      price:1
-    },
-    radish: {
-      foodValue: 5,
-      grow: 3,
-      price: 3
-    },
-    meal: {
-        foodValue: 30,
-        price:10
-    },
-    fish:{
-        foodValue: 20,
-        price:8,
-    }
-  },
+  types: types,
   flags: {
     dirty: 1,
     passedOut: 0,
@@ -97,7 +75,7 @@ const ctx = {
   },
   recipes: recipes,
 };
-
+console.log(ctx.types)
 const CFG={}
 CFG.TURNS_PER_HOUR = 4;
 
@@ -109,9 +87,13 @@ function status() {
   let s = `
  {{ $flags.passedOut ? "You have passed out, falling asleep where you where! " : ""}}{{$flags.passedOut0; ""}}
  Time is {{$GET_HOUR()}} o'clock. It's {{$GET_DAY()}} {{ $IS_DAY() ?"day": "night"}}.
-  You have {{$inventory.money}} coins. Energy: {{$stats.energy}}`;
+  You have {{$inventory.money}} coins. Energy: {{$stats.energy}} ^nl
+  {{$messages.join('^nl')}}
+  `;
   // let s="JAN"
-  return screept.interpolate(s, ctx);
+  let result=screept.interpolate(s, ctx).split('^nl').join('<br>');
+  // ctx.flags.passedOut=false;
+  return result;
 }
 
 function init() {

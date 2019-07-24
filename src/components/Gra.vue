@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="status">
-      <div>{{statusText}}</div>
-      <div @click="chooseOption" data-option="options" class="option">Options</div>
+      <div v-html="statusText"></div>
+      <div @click="chooseOption" data-option="options" v-if="ctx.options" class="option">Options</div>
     </div>
     <div v-if="dialog" class="dialog">
-      <div class="intro">{{dialog.intro.textInterpolated}}</div>
+      <div class="intro" v-html="dialog.intro.textInterpolated"></div>
       <div
         @click="chooseOption"
         :data-option="key"

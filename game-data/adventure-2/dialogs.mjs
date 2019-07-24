@@ -8,7 +8,7 @@ export default
         options:[
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
-            {text:"Fight",run:"$opponent=$npc.find(el=>el.name=='goblin')",go:"combat"},
+            {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'))",go:"combat"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
@@ -61,7 +61,7 @@ export default
         ],
         options:[
             {text:`Plant`,if:"$farm.find(plot=>!plot.plant)",go:"plant"},
-            {text:`Harvest`,if:"$farm.find(plot=>plot.stage===10)",go:"harvest"},
+            {text:`Harvest`,if:"$farm.find($FINDER('stage',10))",go:"harvest"},
             {text:`Grow`,run:"$PLANTS_GROW()"},
             {text:`Back`,go:`return`},
         ]
@@ -96,7 +96,7 @@ export default
     },
     {
         id:"trade",
-        run:"$trader=$npc.find(t=>t.name===$traderName)",
+        run:"$trader=$npc.find($FINDER('name',$traderName))",
         intro:[
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],

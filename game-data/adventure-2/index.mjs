@@ -8,8 +8,8 @@ import {addFunctions} from './verbs.mjs';
 // const dialogName = "start";
 
 const ctx = {
-  // dialogName: "village",
-  dialogName: "options",
+  dialogName: "village",
+  // dialogName: "options",
   message:'',
   stack: [],
   other: {

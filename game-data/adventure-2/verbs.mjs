@@ -1,5 +1,7 @@
 export function addFunctions(ctx, CFG) {
-
+    const finder = (key,value) => (el) => el[key]===value;
+    
+    ctx.FINDER = finder 
     ctx.TURN = x => {
         for (let i = 0; i < x; i++) {
             nextTurn();
@@ -116,7 +118,7 @@ export function addFunctions(ctx, CFG) {
         ctx.INV('stick', stick);
     }
     ctx.CRAFT = (item) => {
-        let recipe = ctx.recipes.find(el => el.name === item);
+        let recipe = ctx.recipes.find(finder('name',item));
         recipe.ing.forEach(ing => {
             let [name, amount] = ing;
             ctx.INV(name, -amount);
@@ -166,4 +168,5 @@ export function addFunctions(ctx, CFG) {
             nextTurn();
         }
     }
+
 }

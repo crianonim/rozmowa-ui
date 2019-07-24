@@ -7,6 +7,7 @@ export function addFunctions(ctx, CFG) {
             nextTurn();
         }
     };
+    ctx.TYPE = x => ctx.types.find(finder('name',x));
     ctx.STACK_POP=()=> {
         console.log("STACK",ctx.stack);
         ctx.stack=ctx.stack.slice(0,ctx.stack.slice.length)
@@ -52,7 +53,7 @@ export function addFunctions(ctx, CFG) {
     ctx.PLANTS_GROW = () => {
         ctx.farm.forEach(plot => {
             if (plot.plant) {
-                plot.stage += ctx.types[plot.plant].grow;
+                plot.stage += ctx.TYPE[plot.plant].grow;
                 if (plot.stage > 10) plot.stage = 10;
             }
         });

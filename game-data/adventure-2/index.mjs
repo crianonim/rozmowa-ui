@@ -2,6 +2,7 @@ import dialogs from "./dialogs.mjs";
 import * as screept from "../../src/lib/screept";
 import {recipes} from './recipes.mjs';
 import {addFunctions} from './verbs.mjs';
+import {types} from './types.mjs';
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
@@ -59,32 +60,7 @@ const ctx = {
     energy: 60,
     energy_max: 100,
   },
-  types: {
-    cabbage: {
-      foodValue: 10,
-      grow: 2,
-      price: 5
-    },
-    cabbage_seed:{
-      price:7
-    },
-    radish_seed:{
-      price:1
-    },
-    radish: {
-      foodValue: 5,
-      grow: 3,
-      price: 3
-    },
-    meal: {
-        foodValue: 30,
-        price:10
-    },
-    fish:{
-        foodValue: 20,
-        price:8,
-    }
-  },
+  types: types,
   flags: {
     dirty: 1,
     passedOut: 0,
@@ -98,7 +74,7 @@ const ctx = {
   },
   recipes: recipes,
 };
-
+console.log(ctx.types)
 const CFG={}
 CFG.TURNS_PER_HOUR = 4;
 

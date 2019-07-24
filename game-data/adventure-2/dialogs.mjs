@@ -35,9 +35,10 @@ export default
         intro:[
             {text:"What do you want to eat?"},
         ],
+        run:"$DEBUG($TYPE('cabbage'))",
         options:[
-            {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $types[va[0]] && $types[va[0]].foodValue)",
-              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$types[$v[0]].foodValue);$INV([$v[0]],-1);$TURN(1)"},
+            {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $TYPE(va[0]) && $TYPE(va[0]).foodValue)",
+              text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$TYPE($v[0]).foodValue);$INV($v[0],-1);$TURN(1)"},
             {text:"Nothing",go:"return"}
         ]
 
@@ -101,11 +102,11 @@ export default
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],
         options:[
-            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$types[$v].price",
-               text:"Buy 1 {{$v}} for {{$types[$v].price}} .",run:"$INV($v,1);$INV('money',-$types[$v].price)"},
+            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$TYPE($v).price",
+               text:"Buy 1 {{$v}} for {{$TYPE($v).price}} .",run:"$INV($v,1);$INV('money',-$TYPE($v).price)"},
 
-            {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$types[$v].price}}",
-              run:"$INV($v,-1);$INV('money',$types[$v].price)"}, 
+            {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$TYPE($v).price}}",
+              run:"$INV($v,-1);$INV('money',$TYPE($v).price)"}, 
             {text:"Back",go:"return"}
         ]
 

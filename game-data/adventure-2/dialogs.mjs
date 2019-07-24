@@ -112,7 +112,7 @@ export default
     },
     {
         id:"combat",
-        run:"$DEBUG($opponent)",
+        run:"$DEBUG($opponent);$options=false;",
         intro:[
             {text:"{{$message}} The fight is over!",if:"$combat_won||$combat_lost",run:"$message=''"},
             {text:"{{$message}}You are fighting with {{$opponent.name}} that has {{$opponent.stats.energy}} energy",run:"$message=''"}
@@ -121,8 +121,8 @@ export default
             // {text:"You have won!",if:"$opponent.stats.energy<1",run:"$INV('money',$RND(10))",go:"return"},
             {text:"Attack!",if:"!$combat_won &&!$combat_lost && $stats.energy>0 && $opponent.stats.energy>0",run:"$COMBAT_ROUND()"},
             // {text:"You are defeated :(",if:"$stats.energy<1",run:"$WAIT_UNTIL_MORNING();$stats.energy=($stats.energy_max/2)>>0",go:"village"},
-            {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false",go:"return"},
-            {text:"Oh well...",if:"$combat_lost",run:"",go:"return"}
+            {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false;$options=true",go:"return"},
+            {text:"Oh well...",if:"$combat_lost",run:"$options=true",go:"return"}
 
         ]
     },

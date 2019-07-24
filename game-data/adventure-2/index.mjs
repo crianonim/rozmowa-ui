@@ -10,6 +10,7 @@ import {addFunctions} from './verbs.mjs';
 const ctx = {
   dialogName: "village",
   // dialogName: "options",
+  options:true,
   message:'',
   stack: [],
   other: {

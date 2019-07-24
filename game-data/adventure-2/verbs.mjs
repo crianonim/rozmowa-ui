@@ -7,6 +7,10 @@ export function addFunctions(ctx, CFG) {
             nextTurn();
         }
     };
+    ctx.MSG = x => {
+        let line = ctx.turn+': '+x;
+        ctx.messages= ctx.messages.concat(line).slice(-5);
+    }
     ctx.TYPE = x => ctx.types.find(finder('name',x));
     ctx.STACK_POP=()=> {
         console.log("STACK",ctx.stack);
@@ -148,12 +152,14 @@ export function addFunctions(ctx, CFG) {
         let player_dmg = ctx.RND(10);
         ctx.STAT('energy',-player_dmg,ctx.opponent);
         ctx.message=`You hit ${ctx.opponent.name} for ${player_dmg} damage. `;
+        ctx.MSG(`You hit ${ctx.opponent.name} for ${player_dmg} damage. `);
     }
     ctx.COMBAT_NPC_ATTACK = () => {
         if (ctx.opponent.stats.energy>0){
             let opp_dmag=ctx.RND(10);
             ctx.STAT('energy',-opp_dmag);
             ctx.message+=` You are hit for ${opp_dmag} damage. `;
+            ctx.MSG(` You are hit for ${opp_dmag} damage. `)
         }
     }
     ctx.COMBAT_STATE = () =>{
@@ -162,6 +168,7 @@ export function addFunctions(ctx, CFG) {
             ctx.combat_won=true;
         } else if (ctx.stats.energy<1){
             ctx.message+=` You have been defeated! `;
+            ctx.MSG(` You have been defeated! `)
             ctx.combat_lost=true;
             waitUntilMorning();
             ctx.stats.energy=(ctx.stats.energy_max/2)>>0;

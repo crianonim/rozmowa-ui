@@ -13,6 +13,7 @@ const ctx = {
   // dialogName: "options",
   options:true,
   message:'',
+  messages:[],
   stack: [],
   other: {
     met: -1
@@ -86,9 +87,13 @@ function status() {
   let s = `
  {{ $flags.passedOut ? "You have passed out, falling asleep where you where! " : ""}}{{$flags.passedOut0; ""}}
  Time is {{$GET_HOUR()}} o'clock. It's {{$GET_DAY()}} {{ $IS_DAY() ?"day": "night"}}.
-  You have {{$inventory.money}} coins. Energy: {{$stats.energy}}`;
+  You have {{$inventory.money}} coins. Energy: {{$stats.energy}} ^nl
+  {{$messages.join('^nl')}}
+  `;
   // let s="JAN"
-  return screept.interpolate(s, ctx);
+  let result=screept.interpolate(s, ctx).split('^nl').join('<br>');
+  // ctx.flags.passedOut=false;
+  return result;
 }
 
 function init() {

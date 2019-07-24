@@ -8,7 +8,7 @@ export default
         options:[
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
-            {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'))",go:"combat"},
+            {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
             {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},

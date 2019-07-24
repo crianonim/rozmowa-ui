@@ -130,6 +130,14 @@ export function addFunctions(ctx, CFG) {
         })
         ctx.INV(item, 1);
     }
+
+    ctx.COMBAT_PREPARE = () => {
+        let opponent=ctx.opponent;
+        if (opponent.generic){
+            opponent.stats.energy=opponent.stats.energy_max;
+        }
+    }
+
     ctx.COMBAT_IS_FINISHED = () => ctx.combat_won || ctx.combat_lost || ctx.stats.energy<1 || ctx.opponent.stats.energy<1;
     ctx.COMBAT_ATTACK= () => {
         let player_dmg = ctx.RND(10);

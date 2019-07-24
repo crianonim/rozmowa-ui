@@ -53,7 +53,7 @@ export function addFunctions(ctx, CFG) {
     ctx.PLANTS_GROW = () => {
         ctx.farm.forEach(plot => {
             if (plot.plant) {
-                plot.stage += ctx.TYPE[plot.plant].grow;
+                plot.stage += ctx.TYPE(plot.plant).grow;
                 if (plot.stage > 10) plot.stage = 10;
             }
         });

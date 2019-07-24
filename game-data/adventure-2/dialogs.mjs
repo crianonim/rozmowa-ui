@@ -112,18 +112,28 @@ export default
     },
     {
         id:"combat",
-        run:"$DEBUG($opponent);$options=false;",
+        run:"$DEBUG($opponent);$options=false;$DEBUG($options)",
         intro:[
             {text:"{{$message}} The fight is over!",if:"$combat_won||$combat_lost",run:"$message=''"},
             {text:"{{$message}}You are fighting with {{$opponent.name}} that has {{$opponent.stats.energy}} energy",run:"$message=''"}
         ],
         options:[
             // {text:"You have won!",if:"$opponent.stats.energy<1",run:"$INV('money',$RND(10))",go:"return"},
-            {text:"Attack!",if:"!$combat_won &&!$combat_lost && $stats.energy>0 && $opponent.stats.energy>0",run:"$COMBAT_ROUND()"},
+            {text:"Attack!",if:"!$COMBAT_IS_FINISHED()",run:"$COMBAT_ROUND()"},
+            {text:"Flee!",if:"!$COMBAT_IS_FINISHED()",go:"combat_flee"},
             // {text:"You are defeated :(",if:"$stats.energy<1",run:"$WAIT_UNTIL_MORNING();$stats.energy=($stats.energy_max/2)>>0",go:"village"},
             {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false;$options=true",go:"return"},
             {text:"Oh well...",if:"$combat_lost",run:"$options=true",go:"return"}
 
+        ]
+    },{
+        id:"combat_flee",
+        run:"$COMBAT_TRY_FLEE()",
+        intro:[
+            {text:"You try to flee. {{$message}}  ",run:"$message=''"}
+        ],
+        options:[
+            {text:"OK",go:"return"}
         ]
     },
     

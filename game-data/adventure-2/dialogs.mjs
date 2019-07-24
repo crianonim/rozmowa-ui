@@ -347,14 +347,17 @@ export default
         },
         {
             id:"forest",
+            run:"$TEST_ROLL($depth*10)?$COMBAT_START('goblin'):false",
             intro: [
+                {text:`You are at the {{$depth}}. You are being attacked by {{$opponent.name}}`,if:"$combat_forced"},
                 {text:`You are at the {{$depth}}.`}
             ],
             options:[
-                {text:"Go deeper",run:"$depth++",go:"forest"},
-                {text:"Forage",run:"$FORAGE();",go:"message"},
-                {text:"Go back to the village",if:"!$depth",go:"village"},
-                {text:"Go back a bit",if:"$depth",run:"$depth--",go:"forest"}
+                {text:"Go deeper",run:"$depth++",if:"!$combat_forced",go:"forest"},
+                {text:"Forage",run:"$FORAGE();",if:"!$combat_forced",go:"message"},
+                {text:"Go back to the village",if:"!$depth && !$combat_forced",go:"village"},
+                {text:"Go back a bit",if:"$depth && !$combat_forced",run:"$depth--",go:"forest"},
+                {text:"Fight!",if:"$combat_forced",run:"$combat_forced=false",go:"combat"}
             ]
         },
         {

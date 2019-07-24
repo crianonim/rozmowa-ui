@@ -131,7 +131,11 @@ export function addFunctions(ctx, CFG) {
         })
         ctx.INV(item, 1);
     }
-
+    ctx.COMBAT_START= (opponentName)=>{
+        ctx.opponent=ctx.npc.find(finder('name','goblin'));
+        ctx.combat_forced=true;
+        ctx.COMBAT_PREPARE();
+    }
     ctx.COMBAT_PREPARE = () => {
         let opponent=ctx.opponent;
         if (opponent.generic){

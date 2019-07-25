@@ -15,7 +15,7 @@
         :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <!-- <div v-if="debug" class="debug">Context : {{context}}</div> -->
+    <log-messages v-if="this.ctx.messages" :messages="ctx.messages"></log-messages>
     <input type="checkbox" v-model="debug">
     <debug v-if="debug" :ctx="ctx"></debug>
   </div>
@@ -24,6 +24,7 @@
 <script>
 import Dialog from "../lib/dialog.js";
 import Debug from './Debug';
+import LogMessages from './LogMessages';
 import gameData from "../../game-data/adventure-2/index.mjs";
 
 export default {
@@ -32,7 +33,8 @@ export default {
     msg: String
   },
   components:{
-    Debug
+    Debug,
+    LogMessages
   },
   data() {
     return {
@@ -61,6 +63,7 @@ export default {
     }
   },
   methods: {
+    
     chooseOption(event) {
       let id = event.target.dataset.option;
       let result;
@@ -112,7 +115,8 @@ export default {
   margin: auto;
 }
 .status,
-.dialog {
+.dialog,
+.box {
   border: 1px solid black;
   box-shadow: 3px 3px;
   padding: 5px;
@@ -138,5 +142,11 @@ export default {
   font-family: monospace;
   font-size: 0.8;
   margin-top: 200px;
+}
+button {
+  color:inherit;
+  background-color: inherit;
+  border: none;
+  outline:none;
 }
 </style>

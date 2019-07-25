@@ -85,10 +85,9 @@ function status() {
   //  Energy: {{stats.energy}}
   //  `
   let s = `
- {{ $flags.passedOut ? "You have passed out, falling asleep where you where! " : ""}}{{$flags.passedOut0; ""}}
- Time is {{$GET_HOUR()}} o'clock. It's {{$GET_DAY()}} {{ $IS_DAY() ?"day": "night"}}.
+  Time is {{$GET_HOUR()}} o'clock. It's {{$GET_DAY()}} {{ $IS_DAY() ?"day": "night"}}.
   You have {{$inventory.money}} coins. Energy: {{$stats.energy}} ^nl
-  {{$messages.join('^nl')}}
+ 
   `;
   // let s="JAN"
   let result=screept.interpolate(s, ctx).split('^nl').join('<br>');

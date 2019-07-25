@@ -6,6 +6,7 @@ export default
 
         ],
         options:[
+            {text:"msg",run:"$MSG('test 1');$MSG('test 2');$MSG('test 3');$MSG('test 4');$MSG('test 5');$MSG('test 6');$MSG('test 7');$MSG('test 8');$MSG('test 9');$MSG('test 10');$MSG('test 11');"},
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
             {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},
@@ -77,7 +78,7 @@ export default
         options:[
             {text:"Change seeds",go:"choose_planting"},
             {each:"(v,k) in  $farm",if:"!$v.plant && $INV($planting)",text:"Plant {{$planting}}", run:`$DEBUG($k);$DEBUG($v); 
-              $PLANT($k,$planting); $TIRE(1); $TURN(5);$INV($planting,-1)`},
+              $PLANT($k,$planting); $TIRE(1); $TURN(1);$INV($planting,-1)`},
             {text:"Back",go:"return"}
         ]
     },
@@ -124,7 +125,7 @@ export default
             {text:"Flee!",if:"!$COMBAT_IS_FINISHED()",go:"combat_flee"},
             // {text:"You are defeated :(",if:"$stats.energy<1",run:"$WAIT_UNTIL_MORNING();$stats.energy=($stats.energy_max/2)>>0",go:"village"},
             {text:"Great!",if:"$combat_won",run:"$combat_won=false;$combat_lost=false;$options=true",go:"return"},
-            {text:"Oh well...",if:"$combat_lost",run:"$options=true",go:"return"}
+            {text:"Oh well...",if:"$combat_lost",run:"$combat_won=false;$combat_lost=false;$options=true",go:"return"}
 
         ]
     },{
@@ -196,8 +197,8 @@ export default
                 { text:`Go to the inn.`,go:"inn"},
                 { text:`Go to the shop.`,run:"$traderName='Zach'",go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},
-                {text:`Go to the forest`,go:"forest"},
-                {text:`Go to the caves`,go:"caves"},
+                {text:`Go to the forest`,run:"$TURN(1);$TIRE(1)",go:"forest"},
+                {text:`Go to the caves`,run:"$TURN(1);$TIRE(1)",go:"caves"},
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },
@@ -353,10 +354,10 @@ export default
                 {text:`You are at the {{$depth}}.`}
             ],
             options:[
-                {text:"Go deeper",run:"$depth++",if:"!$combat_forced",go:"forest"},
+                {text:"Go deeper",run:"$depth++;$TURN(1);$TIRE(1)",if:"!$combat_forced",go:"forest"},
                 {text:"Forage",run:"$FORAGE();",if:"!$combat_forced",go:"message"},
-                {text:"Go back to the village",if:"!$depth && !$combat_forced",go:"village"},
-                {text:"Go back a bit",if:"$depth && !$combat_forced",run:"$depth--",go:"forest"},
+                {text:"Go back to the village",run:"$TURN(1);$TIRE(1)",if:"!$depth && !$combat_forced",go:"village"},
+                {text:"Go back a bit",if:"$depth && !$combat_forced",run:"$depth--;$TURN(1);$TIRE(1)",go:"forest"},
                 {text:"Fight!",if:"$combat_forced",run:"$combat_forced=false",go:"combat"}
             ]
         },

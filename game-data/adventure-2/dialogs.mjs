@@ -6,6 +6,7 @@ export default
 
         ],
         options:[
+            {text:"msg",run:"$MSG('test 1');$MSG('test 2');$MSG('test 3');$MSG('test 4');$MSG('test 5');$MSG('test 6');$MSG('test 7');$MSG('test 8');$MSG('test 9');$MSG('test 10');$MSG('test 11');"},
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
             {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},

@@ -15,7 +15,7 @@
         :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <log-messages :messages="ctx.messages"></log-messages>
+    <log-messages v-if="this.ctx.messages" :messages="ctx.messages"></log-messages>
     <input type="checkbox" v-model="debug">
     <debug v-if="debug" :ctx="ctx"></debug>
   </div>

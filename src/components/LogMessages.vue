@@ -1,6 +1,6 @@
 <template>
   <section class="box log-messages-div">
-    <header>Messages</header>
+    <header><span>Messages</span><input type="checkbox" v-model="expanded"><button @click="handleArrow(1)">UP</button> <button @click="handleArrow(-1)">DOWN</button></header>
     <p
       v-for="value in messageList"
       class="log-message-p"
@@ -18,14 +18,25 @@ export default {
   },
   data() {
     return {
-      expanded: true,
+      expanded: false,
       showCount:5,
+      expandedCount:8,
       offset:1,
     };
   },
+  methods:{
+      handleArrow(x){
+          this.offset+=x;
+          if (this.offset<0) this.offset=0;
+          if (this.offset>this.messages.length-this.count) this.offset=this.messages.length-this.count;
+      }
+  },
   computed:{
+      count(){
+          return this.expanded?this.expandedCount:this.showCount;
+      },
       messageList(){
-          return this.offset?this.messages.slice(-(this.showCount+this.offset),-this.offset):this.messages.slice(-this.showCount);
+          return this.offset?this.messages.slice(-(this.count+this.offset),-this.offset):this.messages.slice(-this.count);
       }
   }
 };

@@ -1,4 +1,5 @@
 export function addFunctions(ctx, CFG) {
+    let message_id=0;
     const finder = (key,value) => (el) => el[key]===value;
     
     ctx.FINDER = finder 
@@ -7,9 +8,14 @@ export function addFunctions(ctx, CFG) {
             nextTurn();
         }
     };
-    ctx.MSG = x => {
-        let line = ctx.turn+': '+x;
-        ctx.messages= ctx.messages.concat(line).slice(-5);
+    ctx.MSG = (text,type='info') => {
+        let message={
+            turn:ctx.turn,
+            id:message_id++,
+            text,
+            type
+        }
+        ctx.messages= ctx.messages.concat(message)//.slice(-5); //unlimited
     }
     ctx.TYPE = x => ctx.types.find(finder('name',x));
     ctx.STACK_POP=()=> {
@@ -151,15 +157,15 @@ export function addFunctions(ctx, CFG) {
     ctx.COMBAT_ATTACK= () => {
         let player_dmg = ctx.RND(10);
         ctx.STAT('energy',-player_dmg,ctx.opponent);
-        ctx.message=`You hit ${ctx.opponent.name} for ${player_dmg} damage. `;
-        ctx.MSG(`You hit ${ctx.opponent.name} for ${player_dmg} damage. `);
+        ctx.message=`You hit ${ctx.opponent.name} for ${player_dmg} damage. `,'combat';
+        ctx.MSG(`You hit ${ctx.opponent.name} for ${player_dmg} damage. `,'combat');
     }
     ctx.COMBAT_NPC_ATTACK = () => {
         if (ctx.opponent.stats.energy>0){
             let opp_dmag=ctx.RND(10);
             ctx.STAT('energy',-opp_dmag);
-            ctx.message+=` You are hit for ${opp_dmag} damage. `;
-            ctx.MSG(` You are hit for ${opp_dmag} damage. `)
+            ctx.message+=` You are hit for ${opp_dmag} damage. `,'combat';
+            ctx.MSG(` You are hit for ${opp_dmag} damage. `,'combat')
         }
     }
     ctx.COMBAT_STATE = () =>{
@@ -211,6 +217,7 @@ export function addFunctions(ctx, CFG) {
             console.log("Pass out!");
             if (!ctx.flags.sleeping) {
                 ctx.flags.passedOut = 1;
+                ctx.MSG('You passed out and woke up in the morning...')
             }
             waitUntilMorning();
         }

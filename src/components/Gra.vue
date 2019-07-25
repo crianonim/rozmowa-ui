@@ -15,10 +15,7 @@
         :key="ctx.dialogName+'_'+key+' '+option.text.length"
       >{{option.textInterpolated}}</div>
     </div>
-    <div class="box log-messages-div">
-      <p v-for="value in ctx.messages" class="log-message-p" :class="'log-class-'+value.type" :key="value.id">{{JSON.stringify(value)}}</p>
-    </div>
-    <!-- <div v-if="debug" class="debug">Context : {{context}}</div> -->
+    <log-messages :messages="ctx.messages"></log-messages>
     <input type="checkbox" v-model="debug">
     <debug v-if="debug" :ctx="ctx"></debug>
   </div>
@@ -27,6 +24,7 @@
 <script>
 import Dialog from "../lib/dialog.js";
 import Debug from './Debug';
+import LogMessages from './LogMessages';
 import gameData from "../../game-data/adventure-2/index.mjs";
 
 export default {
@@ -35,7 +33,8 @@ export default {
     msg: String
   },
   components:{
-    Debug
+    Debug,
+    LogMessages
   },
   data() {
     return {
@@ -64,9 +63,7 @@ export default {
     }
   },
   methods: {
-    encode64(x){
-      return btoa(x)
-    },
+    
     chooseOption(event) {
       let id = event.target.dataset.option;
       let result;
@@ -146,7 +143,5 @@ export default {
   font-size: 0.8;
   margin-top: 200px;
 }
-.log-message-p {
-  margin:0;
-}
+
 </style>

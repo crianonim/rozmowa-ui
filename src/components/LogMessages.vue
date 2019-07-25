@@ -21,7 +21,7 @@ export default {
       expanded: false,
       showCount:5,
       expandedCount:8,
-      offset:1,
+      offset:0,
     };
   },
   methods:{

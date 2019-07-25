@@ -1,3 +1,5 @@
+import { createContext } from "vm";
+
 export function addFunctions(ctx, CFG) {
     let message_id=0;
     const finder = (key,value) => (el) => el[key]===value;
@@ -125,13 +127,18 @@ export function addFunctions(ctx, CFG) {
     // })
     ctx.MINE = () => {
         let stone = (Math.random() * (ctx.depth + 2)) >> 0;
+        ctx.TURN(4);
+        ctx.TIRE(10);
         ctx.message = `You found ${stone} stones.`;
         ctx.INV('stone', stone);
     }
     ctx.FORAGE = () => {
         let stick = (Math.random() * (ctx.depth + 2)) >> 0;
+        ctx.TURN(4);
+        ctx.TIRE(4);
         ctx.message = `You found ${stick} sticks.`;
         ctx.INV('stick', stick);
+
     }
     ctx.CRAFT = (item) => {
         let recipe = ctx.recipes.find(finder('name',item));
@@ -140,6 +147,7 @@ export function addFunctions(ctx, CFG) {
             ctx.INV(name, -amount);
         })
         ctx.INV(item, 1);
+        ctx.TURN(1);
     }
     ctx.COMBAT_START= (opponentName)=>{
         ctx.opponent=ctx.npc.find(finder('name','goblin'));
@@ -156,6 +164,7 @@ export function addFunctions(ctx, CFG) {
     ctx.COMBAT_IS_FINISHED = () => ctx.combat_won || ctx.combat_lost || ctx.stats.energy<1 || ctx.opponent.stats.energy<1;
     ctx.COMBAT_ATTACK= () => {
         let player_dmg = ctx.RND(10);
+        ctx.TIRE(1);
         ctx.STAT('energy',-player_dmg,ctx.opponent);
         ctx.message=`You hit ${ctx.opponent.name} for ${player_dmg} damage. `,'combat';
         ctx.MSG(`You hit ${ctx.opponent.name} for ${player_dmg} damage. `,'combat');
@@ -174,14 +183,20 @@ export function addFunctions(ctx, CFG) {
             ctx.combat_won=true;
         } else if (ctx.stats.energy<1){
             ctx.message+=` You have been defeated! `;
+            ctx.flags.passedOut = 1;
+
             ctx.MSG(` You have been defeated! `)
+            ctx.MSG(`You have passed out for some time...`);
             ctx.combat_lost=true;
-            waitUntilMorning();
+            ctx.TURN(CFG.TURNS_PER_HOUR*8);
+            ctx.flags.passedOut = 0;
+            
             ctx.stats.energy=(ctx.stats.energy_max/2)>>0;
         }
     } 
     ctx.COMBAT_ROUND = ()=>{
         ctx.COMBAT_ATTACK();
+        ctx.TEST_ROLL(10)?ctx.TURN(1):null;
         ctx.COMBAT_NPC_ATTACK();
         ctx.COMBAT_STATE();
     }
@@ -215,11 +230,12 @@ export function addFunctions(ctx, CFG) {
         }
         if (ctx.turn % (CFG.TURNS_PER_HOUR * 24) === CFG.TURNS_PER_HOUR * 22) {
             console.log("Pass out!");
-            if (!ctx.flags.sleeping) {
-                ctx.flags.passedOut = 1;
-                ctx.MSG('You passed out and woke up in the morning...')
+            if (!ctx.flags.sleeping && !ctx.flags.passedOut) {
+                // ctx.flags.passedOut = 1;
+                ctx.MSG(`You passed out, it was too late!`);
             }
             waitUntilMorning();
+            ctx.MSG(`You woke up in the morning.`)
         }
     }
 

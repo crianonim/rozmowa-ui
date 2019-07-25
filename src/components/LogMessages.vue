@@ -1,6 +1,6 @@
 <template>
   <section class="box log-messages-div">
-    <header><span>Messages</span><input type="checkbox" v-model="expanded"><button @click="handleArrow(1)">UP</button> <button @click="handleArrow(-1)">DOWN</button></header>
+    <header><span class="log-messages-header-text">Messages</span><button @click="handleArrow(1)">↑</button> <button @click="handleArrow(-1)">↓</button><input class="expanded-check" type="checkbox" v-model="expanded"></header>
     <p
       v-for="value in messageList"
       class="log-message-p"
@@ -50,5 +50,16 @@ header {
     background-color: black;
     color:white;
     padding: 0.25em;
+    display: flex;
+}
+.log-messages-header-text {
+    flex-grow: 1;
+}
+button {
+    border:1px solid white;
+    margin:1px;
+}
+.expanded-check {
+    align-self: center;
 }
 </style>

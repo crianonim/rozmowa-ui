@@ -143,5 +143,10 @@ export default {
   font-size: 0.8;
   margin-top: 200px;
 }
-
+button {
+  color:inherit;
+  background-color: inherit;
+  border: none;
+  outline:none;
+}
 </style>

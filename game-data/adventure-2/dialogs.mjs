@@ -98,12 +98,12 @@ export default
     },
     {
         id:"trade",
-        run:"$trader=$npc.find($FINDER('name',$traderName))",
+        run:"$trader=$npc.find($FINDER('name',$traderName));$DEBUG($TRADER_ITEMS())",
         intro:[
             {text:"Hello my name is {{$trader.name}} and I'd like to trade!"}
         ],
         options:[
-            {each:"(v,k) in $trader.sells", if:"$INV('money')>=$TYPE($v).price",
+            {each:"(v,k) in $TRADER_ITEMS()", if:"$INV('money')>=$TYPE($v).price",
                text:"Buy 1 {{$v}} for {{$TYPE($v).price}} .",run:"$INV($v,1);$INV('money',-$TYPE($v).price)"},
 
             {each:"(v,k) in $trader.buys", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$TYPE($v).price}}",

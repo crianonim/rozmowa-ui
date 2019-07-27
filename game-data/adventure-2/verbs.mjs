@@ -221,6 +221,15 @@ export function addFunctions(ctx, CFG) {
 
         }
     }
+    
+    ctx.TAGGED_TYPES = (tags) => {
+        let types=[];
+        // tags.map(tag=>)
+    }
+
+    ctx.TRADER_ITEMS = () => ctx.trader.sells.map(
+            item=>item.startsWith('#') ? ctx.types.filter(t=>t.tags && t.tags.includes(item.slice(1))).map(t=>t.name)  : item).flat();
+    
 
     function nextTurn() {
         console.log("Turn passed, new turn ", ++ctx.turn);

@@ -33,9 +33,9 @@ const ctx = {
   npc:[
     { name:"Zach",
     sells:[
-      "cabbage_seed", "radish_seed" // make tags #veg
+      "#produce","cabbage_seed", "radish_seed" // make tags #veg
     ],
-    buys:["cabbage","fish","radish"]
+    buys:["fish"]
   },
 {
   name:"Bartender",

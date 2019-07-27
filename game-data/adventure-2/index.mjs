@@ -14,6 +14,7 @@ const ctx = {
   options:true,
   message:'',
   messages:[],
+  message_id:0,
   stack: [],
   other: {
     met: -1
@@ -75,7 +76,7 @@ const ctx = {
   },
   recipes: recipes,
 };
-console.log(ctx.types)
+// console.log(ctx.types)
 const CFG={}
 CFG.TURNS_PER_HOUR = 4;
 

@@ -9,6 +9,8 @@ import {types} from './types.mjs';
 // const dialogName = "start";
 
 const ctx = {
+  types: types,
+  recipes: recipes,
   dialogName: "village",
   // dialogName: "options",
   options:true,
@@ -62,7 +64,7 @@ const ctx = {
     energy: 60,
     energy_max: 100,
   },
-  types: types,
+ 
   flags: {
     dirty: 1,
     passedOut: 0,
@@ -74,7 +76,7 @@ const ctx = {
     bartender_favor_bernie_asked: 0,
     citaa_remembered: 0
   },
-  recipes: recipes,
+ 
 };
 // console.log(ctx.types)
 const CFG={}
@@ -99,6 +101,7 @@ function status() {
 function init() {
   console.log("INIT RUN");
   addFunctions(ctx,CFG);
+  console.log("TTT", ctx.TYPE('cabbage'),Array.isArray(ctx.types),ctx.FINDER("name","cabbage") )
   
 }
 export default {

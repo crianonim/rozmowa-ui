@@ -1,38 +1,32 @@
 export function addFunctions(ctx, CFG) {
     
-    
+    Object.keys(functions)
+    .filter(fn=>fn===fn.toUpperCase())
+    .forEach(function(fn){
+        ctx[fn]=function(...args){
+           return functions[fn](ctx,CFG,...args);
+        }
+    })
    
-   
+   return;
    
    
     
     ctx.GET_HOUR = () => ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
     ctx.GET_MINUTES = () => (ctx.turn % CFG.TURNS_PER_HOUR) * 15;
 
-    ctx.IS_DAY = () => {
-        let hour = ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
-        if (hour > 5 && hour < 20) return true;
-        return false;
-    };
     // screept.addVerb("IS_DAY", 0, () => {
     //     let hour = ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
     //     if (hour > 5 && hour < 20) return true;
     //     return false;
     // })
-    ctx.GET_DAY = () => (1 + ctx.turn / CFG.TURNS_PER_HOUR / 24) >> 0;
-
-    ctx.WAIT_UNTIL_MORNING = () => waitUntilMorning();
+   
     // screept.addVerb("WAIT_UNTIL_MORNING",0,()=>{
     // waitUntilMorning();
     // })
     //take percentage and return true or false
    
-    ctx.INVENTORY = () => {
-        return Object.entries(ctx.inventory)
-            .filter(entry => entry[1])
-            .map(entry => entry[0] + ":" + entry[1])
-            .join(", ");
-    };
+    
     
     // screept.addVerb("LOAD",0,()=>{
     //     let save=JSON.parse(localStorage.getItem('save'));
@@ -168,11 +162,22 @@ export const functions = {
         }
         ctx.messages = ctx.messages.concat(message) 
     },
-    TYPE(ctx,CFG,x){return ctx.types.find(this.FINDER('name', x))},
+    TYPE(ctx,CFG,x){
+        return ctx.types.find(this.FINDER(ctx,CFG,'name',x));
+        
+    },
     TURN(ctx,CFG,x=1){
         for (let i = 0; i < x; i++) {
             this.nextTurn(ctx,CFG);
         }
+    },
+    GET_HOUR(ctx,CFG){return ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24},
+    GET_DAY(ctx,CFG){return (1 + ctx.turn / CFG.TURNS_PER_HOUR / 24) >> 0},
+
+    IS_DAY(ctx,CFG) {
+        let hour = ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
+        if (hour > 5 && hour < 20) return true;
+        return false;
     },
     TIRE(ctx,CFG,x=1) {
         return this.STAT(ctx,CFG,'energy', -x);
@@ -193,6 +198,12 @@ export const functions = {
             stats[stat] = stats[stat + "_max"];
         }
         if (stats[stat] < 0) stats[stat] = 0;
+    },
+    INVENTORY(ctx,CFG){
+        return Object.entries(ctx.inventory)
+            .filter(entry => entry[1])
+            .map(entry => entry[0] + ":" + entry[1])
+            .join(", ");
     },
     INV(ctx,CFG,item, n){
         const inventory = ctx.inventory;

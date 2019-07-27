@@ -47,7 +47,9 @@ describe('Testing helpers',()=>{
   });
   it("TYPE",()=>{
     const ctx={types};
-    expect(functions.TYPE(ctx,CFG,"cabbage").name).toBe("cabbage");
+    expect(functions.TYPE(ctx,CFG,"fish").name).toBe("fish");
+    expect(functions.TYPE(ctx,CFG,"cabbage").foodValue).toBe(10);
+
   });
   it("STACK_POP",()=>{
     const ctx={stack:["1","2"]};

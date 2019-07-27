@@ -36,7 +36,7 @@ export default
         intro:[
             {text:"What do you want to eat?"},
         ],
-        run:"$DEBUG($TYPE('cabbage'))",
+        run:"$DEBUG('TYPE',$TYPE('cabbage'))",
         options:[
             {each:"(v,k) in Object.entries($inventory).filter( (va)=>va[1] && $TYPE(va[0]) && $TYPE(va[0]).foodValue)",
               text:"{{$v[0]}} (you have {{$v[1]}})", run:"$STAT('energy',$TYPE($v[0]).foodValue);$INV($v[0],-1);$TURN(1)"},

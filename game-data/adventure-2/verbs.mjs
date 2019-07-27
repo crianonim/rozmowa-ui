@@ -35,30 +35,7 @@ export function addFunctions(ctx, CFG) {
     //     });
 
     // })
-    ctx.MINE = () => {
-        let stone = (Math.random() * (ctx.depth + 2)) >> 0;
-        ctx.TURN(4);
-        ctx.TIRE(10);
-        ctx.message = `You found ${stone} stones.`;
-        ctx.INV('stone', stone);
-    }
-    ctx.FORAGE = () => {
-        let stick = (Math.random() * (ctx.depth + 2)) >> 0;
-        ctx.TURN(4);
-        ctx.TIRE(4);
-        ctx.message = `You found ${stick} sticks.`;
-        ctx.INV('stick', stick);
-
-    }
-    ctx.CRAFT = (item) => {
-        let recipe = ctx.recipes.find(finder('name', item));
-        recipe.ing.forEach(ing => {
-            let [name, amount] = ing;
-            ctx.INV(name, -amount);
-        })
-        ctx.INV(item, 1);
-        ctx.TURN(1);
-    }
+    
     ctx.COMBAT_START = (opponentName) => {
         ctx.opponent = ctx.npc.find(finder('name', 'goblin'));
         ctx.combat_forced = true;
@@ -277,4 +254,39 @@ export const functions = {
         plot.plant = "";
         plot.stage = 0;
     },
+
+
+
+  MINE(ctx,CFG){
+        let stone = (Math.random() * (ctx.depth + 2)) >> 0;
+        this.TURN(ctx,CFG,4);
+        this.TIRE(ctx,CFG,10);
+        ctx.message = `You found ${stone} stones.`;
+        this.INV(ctx,CFG,'stone', stone);
+    },
+    FORAGE(ctx,CFG) {
+        let stick = (Math.random() * (ctx.depth + 2)) >> 0;
+        this.TURN(ctx,CFG,4);
+        this.TIRE(ctx,CFG,4);
+        ctx.message = `You found ${stick} sticks.`;
+        this.INV(ctx,CFG,'stick', stick);
+
+    },
+    CRAFT(ctx,CFG,item){
+        let recipe = ctx.recipes.find(this.FINDER(ctx,CFG,'name', item));
+        recipe.ing.forEach(ing => {
+            let [name, amount] = ing;
+            console.log("C",name,amount);
+            this.INV(ctx,CFG,name, -amount);
+        })
+        this.INV(ctx,CFG,item, 1);
+        this.TURN(ctx,CFG,1);
+    },
+
+
+    TRADER_ITEMS (ctx,CFG){ return ctx.types.filter(type=>
+        ctx.trader.sells.some(selling=>selling===type.name || selling.startsWith('tag:')&& type.tags && type.tags.includes(selling.slice(4)))
+    ).map(type=>type.name) },
+
+
 }

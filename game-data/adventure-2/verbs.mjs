@@ -1,5 +1,4 @@
 export function addFunctions(ctx, CFG) {
-    
     Object.keys(functions)
     .filter(fn=>fn===fn.toUpperCase())
     .forEach(function(fn){
@@ -36,78 +35,7 @@ export function addFunctions(ctx, CFG) {
 
     // })
     
-    ctx.COMBAT_START = (opponentName) => {
-        ctx.opponent = ctx.npc.find(finder('name', 'goblin'));
-        ctx.combat_forced = true;
-        ctx.COMBAT_PREPARE();
-    }
-    ctx.COMBAT_PREPARE = () => {
-        let opponent = ctx.opponent;
-        if (opponent.generic) {
-            opponent.stats.energy = opponent.stats.energy_max;
-        }
-    }
-
-    ctx.COMBAT_IS_FINISHED = () => ctx.combat_won || ctx.combat_lost || ctx.stats.energy < 1 || ctx.opponent.stats.energy < 1;
-    ctx.COMBAT_ATTACK = () => {
-        let player_dmg = ctx.RND(10);
-        ctx.TIRE(1);
-        ctx.STAT('energy', -player_dmg, ctx.opponent);
-        ctx.message = `You hit ${ctx.opponent.name} for ${player_dmg} damage. `, 'combat';
-        ctx.MSG(`You hit ${ctx.opponent.name} for ${player_dmg} damage. `, 'combat');
-    }
-    ctx.COMBAT_NPC_ATTACK = () => {
-        if (ctx.opponent.stats.energy > 0) {
-            let opp_dmag = ctx.RND(10);
-            ctx.STAT('energy', -opp_dmag);
-            ctx.message += ` You are hit for ${opp_dmag} damage. `, 'combat';
-            ctx.MSG(` You are hit for ${opp_dmag} damage. `, 'combat')
-        }
-    }
-    ctx.COMBAT_STATE = () => {
-        if (ctx.opponent.stats.energy < 1) {
-            ctx.message += ` You defeated ${ctx.opponent.name}!`;
-            ctx.combat_won = true;
-        } else if (ctx.stats.energy < 1) {
-            ctx.message += ` You have been defeated! `;
-            ctx.flags.passedOut = 1;
-
-            ctx.MSG(` You have been defeated! `)
-            ctx.MSG(`You have passed out for some time...`);
-            ctx.combat_lost = true;
-            ctx.TURN(CFG.TURNS_PER_HOUR * 8);
-            ctx.flags.passedOut = 0;
-
-            ctx.stats.energy = (ctx.stats.energy_max / 2) >> 0;
-        }
-    }
-    ctx.COMBAT_ROUND = () => {
-        ctx.COMBAT_ATTACK();
-        ctx.TEST_ROLL(10) ? ctx.TURN(1) : null;
-        ctx.COMBAT_NPC_ATTACK();
-        ctx.COMBAT_STATE();
-    }
-    ctx.COMBAT_TRY_FLEE = () => {
-        let attempt = ctx.RND(10);
-        if (attempt < 4) {
-            ctx.message += "You managed to escape. "
-            ctx.STACK_POP();
-            console.log("Success")
-        } else if (attempt < 8) {
-            //espace with hit
-            ctx.message += "You managed to escape, but... "
-
-            ctx.COMBAT_NPC_ATTACK();
-            console.log("Success kinda")
-            ctx.STACK_POP();
-        } else {
-            ctx.message += "You didn't manage to escape. "
-
-            ctx.COMBAT_NPC_ATTACK();
-            console.log("Fail!")
-
-        }
-    }
+    
 
     ctx.TAGGED_TYPES = (tags) => {
         let types = [];
@@ -211,16 +139,16 @@ export const functions = {
         }
     },
     SAVE(ctx, CFG){
-        localStorage.setItem("save", JSON.stringify(ctx));
+        let {recipes,types,...toStore} = ctx;
+        console.log(toStore);
+        localStorage.setItem("save", JSON.stringify(toStore));
     },
 
     LOAD(ctx, CFG){
         let save = JSON.parse(localStorage.getItem("save"));
-        Object.keys(ctx).forEach(key => {
+        Object.keys(save).forEach(key => {
             ctx[key] = save[key];
         });
-        //TODO!!!
-        // addFunctions(ctx, CFG)
     },
 
 
@@ -287,6 +215,81 @@ export const functions = {
     TRADER_ITEMS (ctx,CFG){ return ctx.types.filter(type=>
         ctx.trader.sells.some(selling=>selling===type.name || selling.startsWith('tag:')&& type.tags && type.tags.includes(selling.slice(4)))
     ).map(type=>type.name) },
+
+
+    COMBAT_START(ctx,CFGopponentName){
+        ctx.opponent = ctx.npc.find(finder('name', 'goblin'));
+        ctx.combat_forced = true;
+        this.COMBAT_PREPARE(ctx,CFG);
+    },
+    COMBAT_PREPARE(ctx,CFG){
+        let opponent = ctx.opponent;
+        if (opponent.generic) {
+            opponent.stats.energy = opponent.stats.energy_max;
+        }
+    },
+
+    COMBAT_IS_FINISHED(ctx,CFG) {return ctx.combat_won || ctx.combat_lost || ctx.stats.energy < 1 || ctx.opponent.stats.energy < 1},
+    COMBAT_ATTACK(ctx,CFG) {
+        let player_dmg = this.RND(ctx,CFG,10);
+        this.TIRE(ctx,CFG,1);
+        this.STAT(ctx,CFG,'energy', -player_dmg, ctx.opponent);
+        ctx.message = `You hit ${ctx.opponent.name} for ${player_dmg} damage. `, 'combat';
+        this.MSG(ctx,CFG,`You hit ${ctx.opponent.name} for ${player_dmg} damage. `, 'combat');
+    },
+    COMBAT_NPC_ATTACK(ctx,CFG) {
+        if (ctx.opponent.stats.energy > 0) {
+            let opp_dmag = this.RND(ctx,CFG,10);
+            this.STAT(ctx,CFG,'energy', -opp_dmag);
+            ctx.message += ` You are hit for ${opp_dmag} damage. `, 'combat';
+            this.MSG(ctx,CFG,` You are hit for ${opp_dmag} damage. `, 'combat')
+        }
+    },
+    COMBAT_STATE(ctx,CFG) {
+        if (ctx.opponent.stats.energy < 1) {
+            ctx.message += ` You defeated ${ctx.opponent.name}!`;
+            ctx.combat_won = true;
+        } else if (ctx.stats.energy < 1) {
+            ctx.message += ` You have been defeated! `;
+            ctx.flags.passedOut = 1;
+
+            this.MSG(ctx,CFG,` You have been defeated! `)
+            this.MSG(ctx,CFG,`You have passed out for some time...`);
+            ctx.combat_lost = true;
+            this.TURN(ctx,CFG,CFG.TURNS_PER_HOUR * 8);
+            ctx.flags.passedOut = 0;
+
+            ctx.stats.energy = (ctx.stats.energy_max / 2) >> 0;
+        }
+    },
+    COMBAT_ROUND(ctx,CFG) {
+        this.COMBAT_ATTACK(ctx,CFG,);
+        this.TEST_ROLL(ctx,CFG,10) ? ctx.TURN(ctx,CFG,1) : null;
+        this.COMBAT_NPC_ATTACK(ctx,CFG,);
+        this.COMBAT_STATE(ctx,CFG,);
+    },
+    COMBAT_TRY_FLEE(ctx,CFG) {
+        let attempt = ctx.RND(ctx,CFG,10);
+        if (attempt < 4) {
+            ctx.message += "You managed to escape. "
+            this.STACK_POP(ctx,CFG,);
+            console.log("Success")
+        } else if (attempt < 8) {
+            //espace with hit
+            ctx.message += "You managed to escape, but... "
+
+            this.COMBAT_NPC_ATTACK(ctx,CFG,);
+            console.log("Success kinda")
+            this.STACK_POP(ctx,CFG,);
+        } else {
+            ctx.message += "You didn't manage to escape. "
+
+            this.COMBAT_NPC_ATTACK(ctx,CFG);
+            console.log("Fail!")
+
+        }
+    }
+
 
 
 }

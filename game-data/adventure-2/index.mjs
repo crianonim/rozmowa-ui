@@ -3,20 +3,19 @@ import * as screept from "../../src/lib/screept";
 import {recipes} from './recipes.mjs';
 import {addFunctions} from './verbs.mjs';
 import {types} from './types.mjs';
+import { COPYFILE_EXCL } from "constants";
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
 // const dialogName = "start";
 
 const ctx = {
-  types: types,
-  recipes: recipes,
   dialogName: "village",
   // dialogName: "options",
   options:true,
   message:'',
   messages:[],
-  message_id:0,
+  messageId:0,
   stack: [],
   other: {
     met: -1
@@ -100,7 +99,9 @@ function status() {
 
 function init() {
   console.log("INIT RUN");
-  addFunctions(ctx,CFG);
+  ctx.types= types;
+  ctx.recipes = recipes;
+  addFunctions(ctx,CFG,init);
   console.log("TTT", ctx.TYPE('cabbage'),Array.isArray(ctx.types),ctx.FINDER("name","cabbage") )
   
 }

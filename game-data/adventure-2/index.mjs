@@ -29,15 +29,16 @@ const ctx = {
     meal: 2,
     cabbage_seed: 2,
     radish_seed: 1,
+    cabbage:3,
     stick:5,
     stone:10,
   },
   npc:[
     { name:"Zach",
     sells:[
-      "tag:produce","cabbage_seed", "radish_seed" // make tags #veg
+      "cabbage_seed", "radish_seed" 
     ],
-    buys:["fish"]
+    buys:["tag:produce","fish"]
   },
 {
   name:"Bartender",

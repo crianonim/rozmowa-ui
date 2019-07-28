@@ -67,10 +67,14 @@ export const functions = {
         }
         ctx.messages = ctx.messages.concat(message) 
     },
+    ITEM_TYPES(ctx,CFG,arr){
+        let all=arr.map(item => item.startsWith('tag:') ? ctx.types.filter(t => t.tags && t.tags.includes(item.slice(4))).map(t => t.name) : item).flat();
+        let unique=Array.from(new Set(all));
+        return unique;
+    },
     TYPE(ctx,CFG,x){
         return ctx.types.find(this.FINDER(ctx,CFG,'name',x));
-        
-    },
+   },
     TURN(ctx,CFG,x=1){
         for (let i = 0; i < x; i++) {
             this.nextTurn(ctx,CFG);

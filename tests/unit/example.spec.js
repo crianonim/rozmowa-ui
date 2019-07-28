@@ -15,7 +15,7 @@ import {types} from '../../game-data/adventure-2/types.mjs';
 const CFG={}
 CFG.TURNS_PER_HOUR = 4;
 function getContext1(){
-  return {turn:3,farm:[]}
+  return {turn:3,farm:[],types}
 }
 
 describe('Testing helpers',()=>{
@@ -109,3 +109,20 @@ describe("Plant functions",()=>{
   })
 
 })
+describe("Item types and tagging",()=>{
+  it("ITEM_TYPES should return and array",()=>{
+    const ctx=getContext1();
+    let actual=functions.ITEM_TYPES(ctx,CFG,["tag:produce"]);
+    expect(Array.isArray(actual)).toBe(true)
+  });
+  it("ITEM_TYPES should return all produce",()=>{
+    const ctx=getContext1();
+    let actual=functions.ITEM_TYPES(ctx,CFG,["tag:produce"]);
+    expect(actual).toStrictEqual(["cabbage","radish"])
+  })
+  it("ITEM_TYPES should return all unique,",()=>{
+    const ctx=getContext1();
+    let actual=functions.ITEM_TYPES(ctx,CFG,["tag:produce","tag:test"]);
+    expect(actual).toStrictEqual(["cabbage","radish","radish_seed"])
+  })
+});

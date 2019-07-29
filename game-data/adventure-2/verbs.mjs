@@ -26,6 +26,7 @@ export const functions = {
         return (el) => el[key] === value
     },
     MSG(ctx,CFG,text, type = 'info'){
+        console.log(ctx,CFG,text,type);
         let message = {
             turn: ctx.turn,
             id: ctx.messageId++,
@@ -109,10 +110,10 @@ export const functions = {
             console.log("Pass out!");
             if (!ctx.flags.sleeping && !ctx.flags.passedOut) {
                 // ctx.flags.passedOut = 1;
-                this.MSG(`You passed out, it was too late!`);
+                this.MSG(ctx, CFG,`You passed out, it was too late!`);
             }
             this.WAIT_UNTIL_MORNING(ctx, CFG);
-            this.MSG(`You woke up in the morning.`)
+            this.MSG(ctx, CFG,`You woke up in the morning.`)
         }
     },
     SAVE(ctx, CFG){

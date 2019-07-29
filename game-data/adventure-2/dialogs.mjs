@@ -197,8 +197,9 @@ export default
                 { text:`Go to the inn.`,go:"inn"},
                 { text:`Go to the shop.`,run:"$traderName='Zach'",go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},
-                {text:`Go to the forest`,run:"$TURN(1);$TIRE(1)",go:"forest"},
-                {text:`Go to the caves`,run:"$TURN(1);$TIRE(1)",go:"caves"},
+                {text:`Go to the forest`,if:"$discovered.village.forest",run:"$TURN(1);$TIRE(1)",go:"forest"},
+                {text:`Go to the caves`,if:"$discovered.village.caves",run:"$TURN(1);$TIRE(1)",go:"caves"},
+                {text:`Go exploring`,run:"$EXPLORE($discovered.village);$TURN(12)"}
                 // { text: "Back to the road", run:"2 TURN", go: "return" }
             ]
         },

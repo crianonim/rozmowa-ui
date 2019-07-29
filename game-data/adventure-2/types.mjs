@@ -3,16 +3,18 @@ export const types = [{
     foodValue: 10,
     grow: 2,
     price: 5,
-    tags:["produce","test"]
+    tags:["produce"]
 },
 {
     name: "cabbage_seed",
-    price: 7
+    price: 2,
+    tag:["seed"],
 },
 {
     name: "radish_seed",
     price: 1,
-    tags:["test"],
+    tag:["seed"],
+    
 },
 {
     name: "radish",

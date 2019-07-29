@@ -3,6 +3,7 @@ import * as screept from "../../src/lib/screept";
 import {recipes} from './recipes.mjs';
 import {addFunctions} from './verbs.mjs';
 import {types} from './types.mjs';
+import { COPYFILE_EXCL } from "constants";
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
@@ -14,6 +15,7 @@ const ctx = {
   options:true,
   message:'',
   messages:[],
+  messageId:0,
   stack: [],
   other: {
     met: -1
@@ -27,15 +29,16 @@ const ctx = {
     meal: 2,
     cabbage_seed: 2,
     radish_seed: 1,
+    cabbage:3,
     stick:5,
     stone:10,
   },
   npc:[
     { name:"Zach",
     sells:[
-      "cabbage_seed", "radish_seed" // make tags #veg
+      "cabbage_seed", "radish_seed" 
     ],
-    buys:["cabbage","fish","radish"]
+    buys:["tag:produce","fish"]
   },
 {
   name:"Bartender",
@@ -61,7 +64,7 @@ const ctx = {
     energy: 60,
     energy_max: 100,
   },
-  types: types,
+ 
   flags: {
     dirty: 1,
     passedOut: 0,
@@ -73,9 +76,9 @@ const ctx = {
     bartender_favor_bernie_asked: 0,
     citaa_remembered: 0
   },
-  recipes: recipes,
+ 
 };
-console.log(ctx.types)
+// console.log(ctx.types)
 const CFG={}
 CFG.TURNS_PER_HOUR = 4;
 
@@ -97,7 +100,10 @@ function status() {
 
 function init() {
   console.log("INIT RUN");
-  addFunctions(ctx,CFG);
+  ctx.types= types;
+  ctx.recipes = recipes;
+  addFunctions(ctx,CFG,init);
+  console.log("TTT", ctx.TYPE('cabbage'),Array.isArray(ctx.types),ctx.FINDER("name","cabbage") )
   
 }
 export default {

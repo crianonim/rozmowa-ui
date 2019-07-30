@@ -212,7 +212,7 @@ export const functions = {
 
 
     COMBAT_START(ctx,CFGopponentName){
-        ctx.opponent = ctx.npc.find(finder('name', 'goblin'));
+        ctx.opponent = ctx.npc.find(this.FINDER('name', 'goblin'));
         ctx.combat_forced = true;
         this.COMBAT_PREPARE(ctx,CFG);
     },

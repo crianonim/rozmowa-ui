@@ -364,15 +364,19 @@ export default
         },
         {
             id:"caves",
+            run:"$TEST_ROLL(($depth+1)*10) ? $COMBAT_START('goblin') : false",
             intro: [
+                {text:`You are at the {{$depth}}. You are being attacked by {{$opponent.name}}`,if:"$combat_forced"},
                 {text:`You are at the {{$depth}} of the caves.`}
             ],
             options:[
-                {text:"Go deeper",run:"$depth++",go:"caves"},
-                {text:"Mine",run:"$MINE()",go:"message"},
-                {text:"Go back to the village",if:"!$depth",go:"village"},
-                {text:"Go back a bit",if:"$depth",run:"$depth--",go:"caves"}
+                {text:"Go deeper",run:"$depth++;$TURN(1);$TIRE(1)",if:"!$combat_forced",go:"caves"},
+                {text:"Mine",run:"$MINE();",if:"!$combat_forced",go:"message"},
+                {text:"Go back to the village",run:"$TURN(1);$TIRE(1)",if:"!$depth && !$combat_forced",go:"village"},
+                {text:"Go back a bit",if:"$depth && !$combat_forced",run:"$depth--;$TURN(1);$TIRE(1)",go:"caves"},
+                {text:"Fight!",if:"$combat_forced",run:"$combat_forced=false",go:"combat"}
             ]
+            
         }
         
     ]

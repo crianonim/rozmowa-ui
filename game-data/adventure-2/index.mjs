@@ -36,7 +36,7 @@ const ctx = {
   discovered:{
     village:{
       forest:false,
-      cave:true,
+      caves:true,
       meadow:false
     }
   },

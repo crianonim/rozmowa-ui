@@ -111,6 +111,9 @@ export const functions = {
             if (!ctx.flags.sleeping && !ctx.flags.passedOut) {
                 // ctx.flags.passedOut = 1;
                 this.MSG(ctx, CFG,`You passed out, it was too late!`);
+                let lostMoney=Math.ceil(this.INV(ctx,CFG,'money')*0.1);
+                console.log("LOST",lostMoney);
+                this.INV(ctx,CFG,'money',-lostMoney)
             }
             this.WAIT_UNTIL_MORNING(ctx, CFG);
             this.MSG(ctx, CFG,`You woke up in the morning.`)

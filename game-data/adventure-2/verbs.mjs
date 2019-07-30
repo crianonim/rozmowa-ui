@@ -211,8 +211,8 @@ export const functions = {
     ).map(type=>type.name) },
 
 
-    COMBAT_START(ctx,CFGopponentName){
-        ctx.opponent = ctx.npc.find(this.FINDER('name', 'goblin'));
+    COMBAT_START(ctx,CFG,opponentName){
+        ctx.opponent = ctx.npc.find(this.FINDER(ctx,CFG,'name', opponentName));
         ctx.combat_forced = true;
         this.COMBAT_PREPARE(ctx,CFG);
     },

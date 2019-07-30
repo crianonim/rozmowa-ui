@@ -349,7 +349,7 @@ export default
         },
         {
             id:"forest",
-            run:"$TEST_ROLL(($depth+1)*10)?$COMBAT_START('goblin'):false",
+            run:"$TEST_ROLL(($depth+1)*10) ? $COMBAT_START('goblin') : false",
             intro: [
                 {text:`You are at the {{$depth}}. You are being attacked by {{$opponent.name}}`,if:"$combat_forced"},
                 {text:`You are at the {{$depth}}.`}

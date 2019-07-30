@@ -33,6 +33,13 @@ const ctx = {
     stick:5,
     stone:10,
   },
+  discovered:{
+    village:{
+      forest:false,
+      cave:true,
+      meadow:false
+    }
+  },
   npc:[
     { name:"Zach",
     sells:[

@@ -11,40 +11,7 @@ export function addFunctions(ctx, CFG) {
    
    
     
-    ctx.GET_HOUR = () => ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
-    ctx.GET_MINUTES = () => (ctx.turn % CFG.TURNS_PER_HOUR) * 15;
-
-    // screept.addVerb("IS_DAY", 0, () => {
-    //     let hour = ((ctx.turn / CFG.TURNS_PER_HOUR) >> 0) % 24;
-    //     if (hour > 5 && hour < 20) return true;
-    //     return false;
-    // })
-   
-    // screept.addVerb("WAIT_UNTIL_MORNING",0,()=>{
-    // waitUntilMorning();
-    // })
-    //take percentage and return true or false
-   
-    
-    
-    // screept.addVerb("LOAD",0,()=>{
-    //     let save=JSON.parse(localStorage.getItem('save'));
-    //     Object.keys(ctx).forEach(key=>{
-    //         ctx[key]=save[key];
-    //     });
-
-    // })
-    
-    
-
-    ctx.TAGGED_TYPES = (tags) => {
-        let types = [];
-        // tags.map(tag=>)
-    }
-
-    ctx.TRADER_ITEMS = () => ctx.trader.sells.map(
-        item => item.startsWith('#') ? ctx.types.filter(t => t.tags && t.tags.includes(item.slice(1))).map(t => t.name) : item).flat();
-
+//    ctx.GET_MINUTES = () => (ctx.turn % CFG.TURNS_PER_HOUR) * 15;
 
 
 
@@ -59,6 +26,7 @@ export const functions = {
         return (el) => el[key] === value
     },
     MSG(ctx,CFG,text, type = 'info'){
+        console.log(ctx,CFG,text,type);
         let message = {
             turn: ctx.turn,
             id: ctx.messageId++,
@@ -124,6 +92,12 @@ export const functions = {
             if (inventory[item] < 0) inventory[item] = 0;
         }
     },
+    /**
+     * 
+     * @param ctx 
+     * @param CFG 
+     * @param a Number
+     */
     TEST_ROLL(ctx,CFG,a){return Math.random() * 100 < a},
     RND(ctx,CFG,a){return (Math.random() * a) >> 0},
     nextTurn(ctx, CFG) {
@@ -136,10 +110,10 @@ export const functions = {
             console.log("Pass out!");
             if (!ctx.flags.sleeping && !ctx.flags.passedOut) {
                 // ctx.flags.passedOut = 1;
-                this.MSG(`You passed out, it was too late!`);
+                this.MSG(ctx, CFG,`You passed out, it was too late!`);
             }
             this.WAIT_UNTIL_MORNING(ctx, CFG);
-            this.MSG(`You woke up in the morning.`)
+            this.MSG(ctx, CFG,`You woke up in the morning.`)
         }
     },
     SAVE(ctx, CFG){
@@ -204,6 +178,22 @@ export const functions = {
         this.INV(ctx,CFG,'stick', stick);
 
     },
+    EXPLORE(ctx,CFG,place){
+        let places=Object.keys(place);
+        let count=places.length;
+        let undiscovered=Object.entries(place).filter(sub=>!sub[1]);
+        console.log("UND",undiscovered,"CHA",undiscovered.length/count*50);
+
+        if (this.TEST_ROLL(ctx,CFG,undiscovered.length/count*50)){
+            let found = undiscovered[ctx.RND(ctx,CFG,undiscovered.length)][0];
+            place[found]=true;
+            console.log("FOUND",found)
+        } else {
+            console.log("NOT FOUND");
+        }
+
+    }
+    ,
     CRAFT(ctx,CFG,item){
         let recipe = ctx.recipes.find(this.FINDER(ctx,CFG,'name', item));
         recipe.ing.forEach(ing => {

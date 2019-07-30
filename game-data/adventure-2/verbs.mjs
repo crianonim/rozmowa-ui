@@ -63,9 +63,9 @@ export const functions = {
         console.log("DEBUG:",...x);
     },
     STACK_POP(ctx,CFG){
-        console.log("STACK", ctx.stack);
+        // console.log("STACK", ctx.stack);
         ctx.stack = ctx.stack.slice(0, ctx.stack.length-2)
-        console.log("AFTER", ctx.stack)
+        // console.log("AFTER", ctx.stack)
     },
     STAT(ctx,CFG,stat, n,entity){
         entity = entity || ctx;

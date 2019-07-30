@@ -193,7 +193,7 @@ export default
             options: [
                 { text: `Talk to {{!$flags.met_bernie ? "an elderly man" : "Bernie"}} sitting on a bench on the green`,
                   go: "talk_bernie", if:"!$flags.bartender_favor_bernie_finished" },
-                { text:`Go to the pond.`,go:"pond"},
+                { text:`Go to the pond.`,if:"$discovered.village.pond",run:"$TURN(1);$TIRE(1)",go:"pond"},
                 { text:`Go to the inn.`,go:"inn"},
                 { text:`Go to the shop.`,run:"$traderName='Zach'",go:"trade"},
                 {text:`Go to your farm.`,go:"farm"},

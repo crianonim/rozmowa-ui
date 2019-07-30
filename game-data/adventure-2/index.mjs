@@ -37,7 +37,8 @@ const ctx = {
     village:{
       forest:false,
       caves:true,
-      meadow:false
+      meadow:false,
+      pond:false,
     }
   },
   npc:[

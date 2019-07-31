@@ -104,10 +104,10 @@ export default
         ],
         options:[
             {each:"(v,k) in $ITEM_TYPES($trader.sells)", if:"$INV('money')>=$TYPE($v).price",
-               text:"Buy 1 {{$v}} for {{$TYPE($v).price}} .",run:"$INV($v,1);$INV('money',-$TYPE($v).price)"},
+               text:"Buy 1 {{$v}} for {{$TYPE($v).price}} .",run:"$INV($v,1);$INV('money',-$TYPE($v).price);$MSG('You bought 1 {{$v}}')"},
 
             {each:"(v,k) in $ITEM_TYPES($trader.buys)", if:"$INV($v)", text:"Sell 1 {{$v}} for {{$TYPE($v).price}}",
-              run:"$INV($v,-1);$INV('money',$TYPE($v).price)"}, 
+              run:"$INV($v,-1);$INV('money',$TYPE($v).price);$MSG('You sold 1 {{$v}}')"}, 
             {text:"Back",go:"return"}
         ]
 

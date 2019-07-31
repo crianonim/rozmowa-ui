@@ -1,3 +1,4 @@
+import {interpolate} from '../../src/lib/screept.js';
 export function addFunctions(ctx, CFG) {
     Object.keys(functions)
     .filter(fn=>fn===fn.toUpperCase())
@@ -30,7 +31,7 @@ export const functions = {
         let message = {
             turn: ctx.turn,
             id: ctx.messageId++,
-            text,
+            text:interpolate(text,ctx),
             type
         }
         ctx.messages = ctx.messages.concat(message) 

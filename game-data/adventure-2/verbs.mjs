@@ -131,6 +131,10 @@ export const functions = {
         Object.keys(save).forEach(key => {
             ctx[key] = save[key];
         });
+        
+    },
+    IS_SAVED(ctx,CFG){
+        return Boolean(JSON.parse(localStorage.getItem('save')))
     },
 
 

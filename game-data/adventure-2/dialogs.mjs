@@ -7,7 +7,7 @@ export default
             ],
             options:[
                 {text:"Start a new game",go:"start"},
-                {text:"Load game",run:"$LOAD()"},
+                {text:"Load game",run:"$LOAD()",if:"$IS_SAVED()",go:"return"},
                 {text:"About this game",go:"about"}
             ]
         },
@@ -40,8 +40,8 @@ export default
             {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10)"},
             // {text:"Wait an hour",run:"$TURN(4)"},
             // {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
-            {text:"Save Game",run:"$SAVE()"},
-            {text:"Load Game",run:"$LOAD()"},
+            {text:"Save Game",run:"$SAVE()",go:"return"},
+            {text:"Load Game",run:"$LOAD()",go:"return"},
             // {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
             {text:"Back",go:"return"},
         ]

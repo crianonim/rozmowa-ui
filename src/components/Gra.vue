@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      debug: true,
+      debug: false,
       // dialogName: null,
       ctx: {},
       // dialog: null,

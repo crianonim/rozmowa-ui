@@ -3,14 +3,13 @@ import * as screept from "../../src/lib/screept";
 import {recipes} from './recipes.mjs';
 import {addFunctions} from './verbs.mjs';
 import {types} from './types.mjs';
-import { COPYFILE_EXCL } from "constants";
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
 // const dialogName = "start";
 
 const ctx = {
-  dialogName: "start",
+  dialogName: "init",
   // dialogName: "options",
   options:true,
   message:'',

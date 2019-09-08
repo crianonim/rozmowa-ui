@@ -1,5 +1,29 @@
 export default
-    [{
+    [
+        {
+            id:"init",
+            intro:[
+                {text:"Welcome to TEXT-GAME. What would you like to do?"}
+            ],
+            options:[
+                {text:"Start a new game",go:"start"},
+                {text:"Load game",run:"$LOAD()"},
+                {text:"About this game",go:"about"}
+            ]
+        },
+        {
+            id:"about",
+            intro:[
+                {text:`Welcome to the fist scenario written using 'Text-Game' - a dialog based game engine
+                    You will try to survive in an unknown place, after having forgotten everything, even who you are.
+                `}
+            ],
+            options:[
+                {text:"Ok",go:"return"}
+            ]
+        },
+        
+        {
         id:"options",
         intro:[
             {text:"Options. You have {{$INVENTORY()}}"},

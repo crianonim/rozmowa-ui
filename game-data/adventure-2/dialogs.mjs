@@ -163,7 +163,7 @@ export default
             id:"start",
             intro:[
                 {text:`You wake up on the side of a road. Your head hurts and you don\'t remember anything. 
-                {{$flags.looked_around ? "The road seems to lead to some village, you have a feeling that the other way is trouble." : "" }}` }
+                {{$flags.looked_around ? "The road seems to lead to some settlement. You have a strong feeling that the other way is trouble." : "" }}` }
             ],
             options:[
                 // {text:"Look around.",if:" !$flags.looked_around ",run:"$flags.looked_around++"},
@@ -188,7 +188,7 @@ export default
         {
             id: "village",
             intro: [
-                { text: `You are in the village. {{$IS_DAY()?"There are some people around." : "Everyone gone inside for the night"}}` }
+                { text: `You are in the village. It doesn't look particularly big. {{$IS_DAY()?"There are some people around." : "Everyone gone inside for the night"}}` }
             ],
             options: [
                 { text: `Talk to {{!$flags.met_bernie ? "an elderly man" : "Bernie"}} sitting on a bench on the green`,

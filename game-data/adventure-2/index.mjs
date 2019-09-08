@@ -10,7 +10,7 @@ import { COPYFILE_EXCL } from "constants";
 // const dialogName = "start";
 
 const ctx = {
-  dialogName: "village",
+  dialogName: "start",
   // dialogName: "options",
   options:true,
   message:'',

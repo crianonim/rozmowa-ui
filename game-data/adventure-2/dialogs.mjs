@@ -1,24 +1,48 @@
 export default
-    [{
+    [
+        {
+            id:"init",
+            intro:[
+                {text:"Welcome to TEXT-GAME. What would you like to do?"}
+            ],
+            options:[
+                {text:"Start a new game",go:"start"},
+                {text:"Load game",run:"$LOAD()",if:"$IS_SAVED()",go:"return"},
+                {text:"About this game",go:"about"}
+            ]
+        },
+        {
+            id:"about",
+            intro:[
+                {text:`Welcome to the fist scenario written using 'Text-Game' - a dialog based game engine
+                    You will try to survive in an unknown place, after having forgotten everything, even who you are.
+                `}
+            ],
+            options:[
+                {text:"Ok",go:"return"}
+            ]
+        },
+        
+        {
         id:"options",
         intro:[
             {text:"Options. You have {{$INVENTORY()}}"},
 
         ],
         options:[
-            {text:"msg",run:"$MSG('test 1');$MSG('test 2');$MSG('test 3');$MSG('test 4');$MSG('test 5');$MSG('test 6');$MSG('test 7');$MSG('test 8');$MSG('test 9');$MSG('test 10');$MSG('test 11');"},
+            // {text:"msg",run:"$MSG('test 1');$MSG('test 2');$MSG('test 3');$MSG('test 4');$MSG('test 5');$MSG('test 6');$MSG('test 7');$MSG('test 8');$MSG('test 9');$MSG('test 10');$MSG('test 11');"},
             {text:"Craft",go:"craft"},
             {text:"Cook",run:"$crafting_station='kitchen'",go:"craft"},
-            {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},
+            // {text:"Fight",run:"$opponent=$npc.find($FINDER('name','goblin'));$COMBAT_PREPARE()",go:"combat"},
             {text:"Look at yourself.",go:"look-at-self"},
             {text:"Eat",go:"eat"},
-            {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
+            // {text:"Eat a meal {{$INV('widget')}}",if:"$INV('meal') > 0 & $stats.energy < 100; ",run:"$INV('meal',-1); $INV('widget',2)"},
             {text:"Rest an hour",if:"$stats.energy < 100",run:"$TURN(4); $STAT('energy',10)"},
-            {text:"Wait an hour",run:"$TURN(4)"},
-            {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
-            {text:"Save Game",run:"$SAVE()"},
-            {text:"Load Game",run:"$LOAD()"},
-            {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
+            // {text:"Wait an hour",run:"$TURN(4)"},
+            // {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
+            {text:"Save Game",run:"$SAVE()",go:"return"},
+            {text:"Load Game",run:"$LOAD()",go:"return"},
+            // {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
             {text:"Back",go:"return"},
         ]
     },
@@ -163,7 +187,7 @@ export default
             id:"start",
             intro:[
                 {text:`You wake up on the side of a road. Your head hurts and you don\'t remember anything. 
-                {{$flags.looked_around ? "The road seems to lead to some village, you have a feeling that the other way is trouble." : "" }}` }
+                {{$flags.looked_around ? "The road seems to lead to some settlement. You have a strong feeling that the other way is trouble." : "" }}` }
             ],
             options:[
                 // {text:"Look around.",if:" !$flags.looked_around ",run:"$flags.looked_around++"},
@@ -188,7 +212,7 @@ export default
         {
             id: "village",
             intro: [
-                { text: `You are in the village. {{$IS_DAY()?"There are some people around." : "Everyone gone inside for the night"}}` }
+                { text: `You are in the village. It doesn't look particularly big. {{$IS_DAY()?"There are some people around." : "Everyone gone inside for the night"}}` }
             ],
             options: [
                 { text: `Talk to {{!$flags.met_bernie ? "an elderly man" : "Bernie"}} sitting on a bench on the green`,

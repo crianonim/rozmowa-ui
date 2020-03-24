@@ -80,7 +80,8 @@ const ctx = {
     bartender_favor_bernie_finished: 0,
     bartender_favor_bernie_asked: 0,
     citaa_remembered: 0,
-    farm_obtained: 0
+    farm_obtained: 0,
+    village_trader: 1
   }
 };
 // console.log(ctx.types)

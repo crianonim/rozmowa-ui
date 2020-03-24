@@ -37,7 +37,12 @@ export default [
         run: "$TURN(4); $STAT('energy',10)"
       },
       // {text:"Wait an hour",run:"$TURN(4)"},
-      // {text:"Sleep until morning",run:"$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",go:"return"},
+      {
+        text: "Sleep until morning",
+        run:
+          "$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",
+        go: "return"
+      },
       { text: "Save Game", run: "$SAVE()", go: "return" },
       { text: "Load Game", run: "$LOAD()", go: "return" },
       // {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
@@ -279,6 +284,11 @@ export default [
         if: "$discovered.village.pond",
         run: "$TURN(1);$TIRE(1)",
         go: "pond"
+      },
+      {
+        text: `Trade with the wondering trader`,
+        if: "$IS_DAY() && $flags.village_trader",
+        go: "village_trader"
       },
       { text: `Go to the inn.`, go: "inn" },
       { text: `Go to the shop.`, run: "$traderName='Zach'", go: "trade" },
@@ -541,6 +551,16 @@ export default [
         if: "$combat_forced",
         run: "$combat_forced=false",
         go: "combat"
+      }
+    ]
+  },
+  {
+    id: "village_trader",
+    intro: [{ text: "Hello, I'm a Trader" }],
+    options: [
+      {
+        text: "BYe",
+        go: "return"
       }
     ]
   },

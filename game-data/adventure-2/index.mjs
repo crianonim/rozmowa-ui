@@ -1,8 +1,8 @@
 import dialogs from "./dialogs.mjs";
 import * as screept from "../../src/lib/screept";
-import {recipes} from './recipes.mjs';
-import {addFunctions} from './verbs.mjs';
-import {types} from './types.mjs';
+import { recipes } from "./recipes.mjs";
+import { addFunctions } from "./verbs.mjs";
+import { types } from "./types.mjs";
 // import screept from 'screept/index.mjs';
 // console.log("ROZMOWA",rozmowa);
 
@@ -11,15 +11,15 @@ import {types} from './types.mjs';
 const ctx = {
   dialogName: "init",
   // dialogName: "options",
-  options:true,
-  message:'',
-  messages:[],
-  messageId:0,
+  options: true,
+  message: "",
+  messages: [],
+  messageId: 0,
   stack: [],
   other: {
     met: -1
   },
-  depth:0,
+  depth: 0,
   turn: 25,
   inventory: {
     money: 20,
@@ -28,50 +28,48 @@ const ctx = {
     meal: 2,
     cabbage_seed: 2,
     radish_seed: 1,
-    cabbage:3,
-    stick:5,
-    stone:10,
+    cabbage: 3,
+    stick: 5,
+    stone: 10
   },
-  discovered:{
-    village:{
-      forest:false,
-      caves:true,
-      meadow:false,
-      pond:false,
+  discovered: {
+    village: {
+      forest: false,
+      caves: true,
+      meadow: false,
+      pond: false
     }
   },
-  npc:[
-    { name:"Zach",
-    sells:[
-      "cabbage_seed", "radish_seed" 
-    ],
-    buys:["tag:produce","fish"]
-  },
-{
-  name:"Bartender",
-  sells:["meal"],
-  buys:["fish","cabbage"]
-},
-{
-  name:"goblin",
-  generic:true,
-  stats:{
-    energy:50,
-    energy_max:50,
-    attack:120,
-    defence:75,
-  }
-  
-}
-],
-  
+  npc: [
+    {
+      name: "Zach",
+      sells: ["cabbage_seed", "radish_seed"],
+      buys: ["tag:produce", "fish"]
+    },
+    {
+      name: "Bartender",
+      sells: ["meal"],
+      buys: ["fish", "cabbage"]
+    },
+    {
+      name: "goblin",
+      generic: true,
+      stats: {
+        energy: 50,
+        energy_max: 50,
+        attack: 120,
+        defence: 75
+      }
+    }
+  ],
+
   planting: "cabbage_seed",
   farm: [{ plant: "cabbage", stage: 8 }, { plant: "" }],
   stats: {
     energy: 60,
-    energy_max: 100,
+    energy_max: 100
   },
- 
+
   flags: {
     dirty: 1,
     passedOut: 0,
@@ -81,12 +79,12 @@ const ctx = {
     talked_to_bartender: 0,
     bartender_favor_bernie_finished: 0,
     bartender_favor_bernie_asked: 0,
-    citaa_remembered: 0
-  },
- 
+    citaa_remembered: 0,
+    farm_obtained: 0
+  }
 };
 // console.log(ctx.types)
-const CFG={}
+const CFG = {};
 CFG.TURNS_PER_HOUR = 4;
 
 function status() {
@@ -100,18 +98,25 @@ function status() {
  
   `;
   // let s="JAN"
-  let result=screept.interpolate(s, ctx).split('^nl').join('<br>');
+  let result = screept
+    .interpolate(s, ctx)
+    .split("^nl")
+    .join("<br>");
   // ctx.flags.passedOut=false;
   return result;
 }
 
 function init() {
   console.log("INIT RUN");
-  ctx.types= types;
+  ctx.types = types;
   ctx.recipes = recipes;
-  addFunctions(ctx,CFG,init);
-  console.log("TTT", ctx.TYPE('cabbage'),Array.isArray(ctx.types),ctx.FINDER("name","cabbage") )
-  
+  addFunctions(ctx, CFG, init);
+  console.log(
+    "TTT",
+    ctx.TYPE("cabbage"),
+    Array.isArray(ctx.types),
+    ctx.FINDER("name", "cabbage")
+  );
 }
 export default {
   dialogs,

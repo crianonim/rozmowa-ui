@@ -47,6 +47,11 @@ const ctx = {
       buys: ["tag:produce", "fish"]
     },
     {
+      name: "Wandering Trader",
+      sells: ["cabbage_seed"],
+      buys: ["tag:produce"]
+    },
+    {
       name: "Bartender",
       sells: ["meal"],
       buys: ["fish", "cabbage"]

@@ -116,6 +116,13 @@ export const functions = {
     this.PLANTS_GROW(ctx, CFG);
     if (this.TEST_ROLL(ctx, CFG, 75)) {
       ctx.flags.village_trader = 1;
+      const trader = ctx.npc.find(el => el.name === "Wandering Trader");
+      trader.sells = ["fish", "meal", "cabbage", "radish_seed"].filter(
+        () => Math.random() * 100 < 50
+      );
+      trader.buys = ["tag:produce", "fish", "meal", "axe", "widget"].filter(
+        () => Math.random() * 100 < 50
+      );
     } else {
       ctx.flags.village_trader = 0;
     }
@@ -125,6 +132,7 @@ export const functions = {
     if (ctx.turn % (CFG.TURNS_PER_HOUR * 24) === CFG.TURNS_PER_HOUR * 6) {
       // console.log("New day!");
       this.newDay(ctx, CFG);
+      //restart the trader
     }
     if (ctx.turn % (CFG.TURNS_PER_HOUR * 24) === CFG.TURNS_PER_HOUR * 22) {
       console.log("Pass out!");

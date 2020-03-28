@@ -63,7 +63,12 @@ export default [
         run: "$SAVE(2)",
         go: "return"
       },
-      { text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}", run: "$SAVE(3)", go: "return" }
+      {
+        text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}",
+        run: "$SAVE(3)",
+        go: "return"
+      },
+      { text: "Back", go: "return" }
     ]
   },
   {
@@ -80,7 +85,12 @@ export default [
         run: "$LOAD(2)",
         go: "return"
       },
-      { text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}", run: "$LOAD(3)", go: "return" }
+      {
+        text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}",
+        run: "$LOAD(3)",
+        go: "return"
+      },
+      { text: "Back", go: "return" }
     ]
   },
   {
@@ -322,7 +332,8 @@ export default [
       {
         text: `Trade with the wondering trader`,
         if: "$IS_DAY() && $flags.village_trader",
-        go: "village_trader"
+        run: "$traderName='Wandering Trader'",
+        go: "trade"
       },
       { text: `Go to the inn.`, go: "inn" },
       { text: `Go to the shop.`, run: "$traderName='Zach'", go: "trade" },
@@ -585,16 +596,6 @@ export default [
         if: "$combat_forced",
         run: "$combat_forced=false",
         go: "combat"
-      }
-    ]
-  },
-  {
-    id: "village_trader",
-    intro: [{ text: "Hello, I'm a Trader" }],
-    options: [
-      {
-        text: "BYe",
-        go: "return"
       }
     ]
   },

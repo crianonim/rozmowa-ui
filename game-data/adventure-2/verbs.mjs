@@ -317,6 +317,7 @@ export const functions = {
     let attempt = ctx.RND(ctx, CFG, 10);
     if (attempt < 4) {
       ctx.message += "You managed to escape. ";
+      ctx.options = true;
       this.STACK_POP(ctx, CFG);
       console.log("Success");
     } else if (attempt < 8) {

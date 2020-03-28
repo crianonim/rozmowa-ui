@@ -4,7 +4,7 @@ export default [
     intro: [{ text: "Welcome to TEXT-GAME. What would you like to do?" }],
     options: [
       { text: "Start a new game", go: "start" },
-      { text: "Load game", run: "$LOAD()", if: "$IS_SAVED()", go: "return" },
+      { text: "Load game", if: "$IS_SAVED()", go: "load" },
       { text: "About this game", go: "about" }
     ]
   },
@@ -43,10 +43,44 @@ export default [
           "$flags.sleeping=1;$WAIT_UNTIL_MORNING();$flags.sleeping=0;$stats.energy=$stats.energy_max*1.2",
         go: "return"
       },
-      { text: "Save Game", run: "$SAVE()", go: "return" },
-      { text: "Load Game", run: "$LOAD()", go: "return" },
+      { text: "Save Game", go: "save" },
+      { text: "Load Game", go: "load" },
       // {text:"* Grow Plants *",run:"$PLANTS_GROW()"},
       { text: "Back", go: "return" }
+    ]
+  },
+  {
+    id: "save",
+    intro: [{ text: "Choose a Save slot" }],
+    options: [
+      {
+        text: "Slot 1 - {{$SAVE_SLOT_INFO(1)}}",
+        run: "$SAVE(1)",
+        go: "return"
+      },
+      {
+        text: "Slot 2 - {{$SAVE_SLOT_INFO(2)}}",
+        run: "$SAVE(2)",
+        go: "return"
+      },
+      { text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}", run: "$SAVE(3)", go: "return" }
+    ]
+  },
+  {
+    id: "load",
+    intro: [{ text: "Choose a Save slot" }],
+    options: [
+      {
+        text: "Slot 1 - {{$SAVE_SLOT_INFO(1)}}",
+        run: "$LOAD(1)",
+        go: "return"
+      },
+      {
+        text: "Slot 2 - {{$SAVE_SLOT_INFO(2)}}",
+        run: "$LOAD(2)",
+        go: "return"
+      },
+      { text: "Slot 3 - {{$SAVE_SLOT_INFO(3)}}", run: "$LOAD(3)", go: "return" }
     ]
   },
   {

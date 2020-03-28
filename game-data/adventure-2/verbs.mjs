@@ -139,20 +139,29 @@ export const functions = {
       this.MSG(ctx, CFG, `You woke up in the morning.`);
     }
   },
-  SAVE(ctx, CFG) {
+  SAVE(ctx, CFG, slot = 0) {
     let { recipes, types, ...toStore } = ctx;
+    localStorage.setItem(
+      "save_meta_" + slot,
+      JSON.stringify({ date: new Date() + "", turn: ctx.turn })
+    );
     console.log(toStore);
-    localStorage.setItem("save", JSON.stringify(toStore));
+    localStorage.setItem("save_" + slot, JSON.stringify(toStore));
   },
 
-  LOAD(ctx, CFG) {
-    let save = JSON.parse(localStorage.getItem("save"));
+  LOAD(ctx, CFG, slot = 0) {
+    let save = JSON.parse(localStorage.getItem("save_" + slot));
     Object.keys(save).forEach(key => {
       ctx[key] = save[key];
     });
   },
   IS_SAVED(ctx, CFG) {
-    return Boolean(JSON.parse(localStorage.getItem("save")));
+    return Object.keys(localStorage).some(el =>
+      ["save_1", "save_2", "save_3"].includes(el)
+    );
+  },
+  SAVE_SLOT_INFO(ctx, CFG, slot = 0) {
+    return localStorage.getItem("save_meta_" + slot) || " - Empty -";
   },
 
   // PLANTS
@@ -237,6 +246,8 @@ export const functions = {
       )
       .map(type => type.name);
   },
+
+  // COMBAT
 
   COMBAT_START(ctx, CFG, opponentName) {
     ctx.opponent = ctx.npc.find(this.FINDER(ctx, CFG, "name", opponentName));
